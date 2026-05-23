@@ -42,8 +42,19 @@ def classify(text: str, top_k: int = 3):
         cat_scores[c] = cat_scores.get(c, 0) + sims[i]
     predicted = max(cat_scores, key=cat_scores.get)
 
-    # 위험도: 악성 위험 카테고리의 가중치 합 / 전체
-    risk = sum(s for c, s in cat_scores.items() if "악성" in c) / max(sum(cat_scores.values()), 1e-9)
+    # 위험도 계산 — 최고 매칭 신뢰도까지 고려해 false positive 방지
+    top_sim = float(sims[top_idx[0]])
+    top_cat = _samples[top_idx[0]]["category"]
+    raw_risk = sum(s for c, s in cat_scores.items() if "악성" in c) / max(sum(cat_scores.values()), 1e-9)
+
+    # 1) 최고 매칭이 약함 (< 0.30): 신뢰도 부족 → 위험도 깎음
+    if top_sim < 0.30:
+        risk = raw_risk * 0.4
+    # 2) 최고 매칭이 정당 카테고리이고 강함 (>= 0.35): 위험도 거의 0
+    elif "악성" not in top_cat and top_sim >= 0.35:
+        risk = raw_risk * 0.2
+    else:
+        risk = raw_risk
 
     top_cases = [
         {
@@ -66,11 +77,11 @@ def classify(text: str, top_k: int = 3):
 
 def risk_to_label(risk: float) -> tuple[str, str]:
     """위험도 점수 → 라벨 + 권고."""
-    if risk >= 0.6:
+    if risk >= 0.65:
         return "🚫 악성 위험 — 교권침해 사례 매우 유사", "민원 제출 전 자가 점검을 강력 권장합니다."
-    if risk >= 0.3:
+    if risk >= 0.45:
         return "⚠️ 주의 — 표현·내용 검토 필요", "사실 확인·표현 다듬기 권장."
-    return "✅ 정당한 민원으로 분류", "학교에 정식 제출 가능."
+    return "✅ 정당한 민원으로 분류", "특별한 위험 신호 없음. 학교에 정식 제출 가능합니다."
 
 
 if __name__ == "__main__":
