@@ -24,6 +24,29 @@ def _load(name, path):
 
 clf = _load("clf", ANALYSIS / "40_classifier_rag.py")
 rep = _load("rep", ANALYSIS / "41_report_generator.py")
+faq = _load("faq", ANALYSIS / "42_faq_matcher.py")
+llm = _load("llm", ANALYSIS / "43_llm_answer.py")
+sch = _load("sch", ANALYSIS / "44_school_data.py")
+
+
+@st.cache_data(show_spinner=False, ttl=3600)
+def cached_search_school(name: str):
+    return sch.search_school(name, limit=10)
+
+
+@st.cache_data(show_spinner=False, ttl=600)
+def cached_schedule(school_dict_str: str, from_ymd: str, to_ymd: str):
+    return sch.get_schedule(json.loads(school_dict_str), from_ymd, to_ymd)
+
+
+@st.cache_data(show_spinner=False, ttl=600)
+def cached_meal(school_dict_str: str, from_ymd: str, to_ymd: str):
+    return sch.get_meal(json.loads(school_dict_str), from_ymd, to_ymd)
+
+
+@st.cache_data(show_spinner=False)
+def cached_smart_answer(question: str) -> dict:
+    return llm.smart_answer(question)
 
 st.set_page_config(page_title="학교 민원 AI 게이트웨이",
                    page_icon="🛡️", layout="wide")
@@ -40,25 +63,41 @@ st.sidebar.markdown("---")
 mode = st.sidebar.radio(
     "사용자 모드 선택",
     [
-        "👨‍👩‍👧 학부모 — 민원 자가 점검",
+        "👨‍👩‍👧 학부모 — AI 도우미",
         "🏫 학교 — 접수 민원 분석 리포트",
         "🏛 교육청 — 시도별 교권 보호 현황",
         "ℹ️ 시스템 소개 & 활용 데이터",
     ],
 )
 st.sidebar.markdown("---")
+st.sidebar.markdown("### 🏫 우리 학교 설정")
+school_query = st.sidebar.text_input("학교명 검색", placeholder="예: 한빛초")
+if school_query:
+    schools = cached_search_school(school_query)
+    if schools:
+        opts = {f"{s['name']} ({s['sido']})": s for s in schools}
+        chosen = st.sidebar.selectbox("학교 선택", list(opts.keys()))
+        st.session_state.school = opts[chosen]
+        st.sidebar.success(f"✅ {st.session_state.school['name']} 연결")
+    else:
+        st.sidebar.warning("검색 결과 없음")
+elif "school" in st.session_state:
+    st.sidebar.info(f"현재: {st.session_state.school['name']}")
+
+st.sidebar.markdown("---")
 st.sidebar.markdown(
     """
 ### 활용 교육 공공데이터
-- 교육부 교권보호위원회 개최 현황 (data.go.kr 15137983)
-- NEIS 학원교습소정보 (전국 138,259건)
-- KOSIS 사교육비조사 (DT_1PE105, 2009~2025)
+- **NEIS Open API (실시간)**: 학교정보·학사일정·급식
+- 교육부 교권보호위원회 (data.go.kr 15137983)
+- 교육부 2024 교육활동 침해 실태조사 (korea.kr 156688735)
+- KOSIS 사교육비조사 (DT_1PE105)
 
 ### AI 모델
-1. 민원 분류 (TF-IDF + cosine)
-2. 유사 사례 검색 (RAG)
-3. 위험도 평가 + 리포트 생성
-4. 시도별 5년 시계열 예측
+1. **학교 FAQ + 공지·통신문 통합 검색** (TF-IDF + cosine)
+2. **Claude Haiku 4.5** 자연어 답변 생성
+3. 민원 분류기 (정당/모호/악성)
+4. 위험도 평가 + 학교용 리포트
 """
 )
 
@@ -66,42 +105,124 @@ st.sidebar.markdown(
 # 1. 학부모 모드
 # =========================================================
 if mode.startswith("👨"):
-    st.title("👨‍👩‍👧 학부모 — 민원 자가 점검")
+    st.title("👨‍👩‍👧 학부모 — AI 도우미 (학교 민원 게이트웨이)")
     st.markdown(
-        "민원을 학교에 직접 제출하기 전, **AI가 과거 유사 사례를 검색하고 "
-        "교권 침해 가능성을 분석**해 드립니다. 신중한 민원 = 우리 아이의 학교가 더 좋아집니다."
+        "**무엇이 궁금하신가요?** 학교 표준 답변을 즉시 알려드리고, "
+        "혹시 모를 **교권 침해 사례**도 함께 보여드립니다. "
+        "정식 민원이 필요하면 그때 학교에 분석 리포트와 함께 전달합니다."
     )
 
     c1, c2 = st.columns([2, 1])
     with c1:
         complaint = st.text_area(
-            "민원 내용을 자유롭게 작성해 주세요",
+            "질문·요청·민원 내용을 자유롭게 작성해 주세요",
             height=180,
-            placeholder="예: 우리 아이가 수업 시간에 자리 옮겨졌다고 모욕감을 느꼈답니다. 담임 교체를 요청합니다.",
+            placeholder="예: 통학로에 신호등이 없어 매일 위험합니다. / 우리 아이가 알레르기가 있어요. / 선생님께 감사 표현하고 싶습니다.",
         )
     with c2:
         parent_name = st.text_input("작성자 (선택)", value="익명")
-        grade = st.selectbox("자녀 학년", ["미입력"] + [f"{x}학년" for x in
+        grade = st.selectbox("자녀 학년", ["미입력"] + [f"{x}" for x in
                                                   ["초1", "초2", "초3", "초4", "초5", "초6",
                                                    "중1", "중2", "중3", "고1", "고2", "고3"]])
 
-    if st.button("🔎 AI 자가 점검 실행", type="primary", use_container_width=True):
+    if st.button("🤖 AI 도우미에게 물어보기", type="primary", use_container_width=True):
         if not complaint.strip():
-            st.error("민원 내용을 입력해 주세요.")
+            st.error("내용을 입력해 주세요.")
         else:
-            r = rep.generate_report(complaint, parent_name, grade)
-            st.session_state.last_report = r
+            with st.spinner("학교 데이터 검색 + AI 답변 생성 중..."):
+                smart = cached_smart_answer(complaint)
+                report = rep.generate_report(complaint, parent_name, grade)
+            st.session_state.last_smart = smart
+            st.session_state.last_report = report
 
     if "last_report" in st.session_state:
+        smart = st.session_state.get("last_smart", {})
         r = st.session_state.last_report
-        st.markdown("---")
-        st.markdown("## 🔎 자가 점검 결과")
+        school = st.session_state.get("school")
 
-        # 위험도 표시
+        st.markdown("---")
+
+        # ===== 우리 학교 실시간 정보 (학교 선택 시) =====
+        if school:
+            st.markdown(f"### 🏫 우리 학교: **{school['name']}** ({school['sido']})")
+            from datetime import date, timedelta
+            today = date.today()
+            from_ymd = today.strftime("%Y%m%d")
+            to_ymd = (today + timedelta(days=14)).strftime("%Y%m%d")
+            colS1, colS2 = st.columns(2)
+            with colS1:
+                with st.expander("📅 향후 2주 학사일정 (실시간)", expanded=False):
+                    try:
+                        events = cached_schedule(json.dumps(school), from_ymd, to_ymd)
+                        if events:
+                            for e in events[:10]:
+                                st.caption(f"**{e['ymd']}** · {e['event']}")
+                        else:
+                            st.caption("일정 없음")
+                    except Exception as ex:
+                        st.caption(f"조회 실패: {ex}")
+            with colS2:
+                with st.expander("🍱 이번 주 급식 (실시간)", expanded=False):
+                    try:
+                        meals = cached_meal(json.dumps(school), from_ymd,
+                                            (today + timedelta(days=5)).strftime("%Y%m%d"))
+                        if meals:
+                            for m in meals[:3]:
+                                st.caption(f"**{m['ymd']} {m['type']}**\n\n{m['dishes'][:120]}")
+                        else:
+                            st.caption("급식 정보 없음")
+                    except Exception as ex:
+                        st.caption(f"조회 실패: {ex}")
+            st.markdown("---")
+
+        # ===== STEP 1: 답변 (FAQ 또는 LLM) =====
+        mode = smart.get("mode", "faq")
+        faqs = smart.get("faqs", [])
+        llm_res = smart.get("llm")
+
+        SRC_ICON = {"FAQ": "📖", "공지사항": "📢", "가정통신문": "📨",
+                    "학교 운영 매뉴얼": "📋"}
+        if mode == "faq" and faqs:
+            st.markdown("## 🏫 학교의 표준 답변 — 이 내용으로 해결되시나요?")
+            st.caption("🗂️ 학교 FAQ·공지·가정통신문에서 강하게 매칭됨 (관련도 0.30 이상)")
+            for i, f in enumerate(faqs, 1):
+                src = f.get("source", "FAQ")
+                icon = SRC_ICON.get(src, "📄")
+                with st.container(border=True):
+                    st.markdown(f"### {icon} [{src}] {f['question']}")
+                    st.markdown(f"**답변**: {f['answer']}")
+                    if f.get("link"):
+                        st.markdown(f"**🔗**: {f['link']}")
+                    st.caption(f"카테고리: {f['category']}  ·  관련도: {f['similarity']:.2f}")
+
+        elif llm_res and llm_res.get("answer"):
+            st.markdown("## 🤖 AI 도우미 답변")
+            tag = "FAQ + AI 보강" if mode == "llm_with_faq" else "AI 직접 답변"
+            st.caption(f"🧠 {tag}  ·  모델: {llm_res.get('model', '-')}  "
+                       f"·  토큰: in {llm_res.get('input_tokens', '-')} / out {llm_res.get('output_tokens', '-')}")
+            with st.container(border=True):
+                st.markdown(llm_res["answer"])
+
+            if faqs:
+                with st.expander(f"📚 AI가 참고한 학교 자료 {len(faqs)}건 보기"):
+                    for f in faqs:
+                        src = f.get("source", "FAQ")
+                        icon = SRC_ICON.get(src, "📄")
+                        st.markdown(f"**{icon} [{src}] {f['question']}** (관련도 {f['similarity']:.2f})")
+                        st.write(f"- {f['answer']}")
+        else:
+            err = llm_res.get("error") if llm_res else "데이터 없음"
+            st.warning(f"AI 답변을 생성하지 못했습니다 ({err}). 아래 교권 침해 사전 점검을 참고해 주세요.")
+
+        # ===== STEP 2: 교권 침해 사전 점검 (항상 표시) =====
+        st.markdown("---")
+        st.markdown("## 🛡️ 교권 침해 사전 점검")
+        st.caption("같은 내용이 학교에 정식 민원으로 갔을 때 교권 침해 사례에 해당할 가능성을 분석합니다.")
+
         risk = r["risk_score"]
         color = "🔴" if risk >= 0.6 else ("🟡" if risk >= 0.3 else "🟢")
         k1, k2, k3 = st.columns(3)
-        k1.metric("위험도 점수", f"{color} {risk:.2f} / 1.00")
+        k1.metric("교권침해 위험도", f"{color} {risk:.2f} / 1.00")
         k2.metric("AI 분류", r["predicted_category"])
         k3.metric("긴급도", r["urgency"])
 
@@ -112,31 +233,41 @@ if mode.startswith("👨"):
         else:
             st.success(f"**{r['risk_label']}**\n\n{r['recommend_self_check']}")
 
-        st.markdown("### 📚 과거 유사 사례 (Top 3)")
-        for i, c in enumerate(r["similar_cases"], 1):
-            with st.expander(
-                f"{i}. [{c['category']}] 유사도 {c['similarity']:.2f} — {c['verdict']}"
-            ):
-                st.write(f"**사례 원문**: {c['text']}")
-                st.write(f"**판정 근거**: {c['rationale']}")
+        with st.expander("📚 과거 교권보호위 유사 사례 Top 3 보기"):
+            for i, c in enumerate(r["similar_cases"], 1):
+                st.markdown(f"**{i}. [{c['category']}]  유사도 {c['similarity']:.2f}**")
+                st.write(f"- 사례: {c['text']}")
+                st.write(f"- 판정: {c['verdict']}")
+                st.write(f"- 근거: {c['rationale']}")
+                st.markdown("---")
 
+        # ===== STEP 3: 진행 결정 =====
         st.markdown("---")
-        st.markdown("### 🚦 어떻게 하시겠습니까?")
-        cc1, cc2, cc3 = st.columns(3)
+        st.markdown("### 🚦 이제 어떻게 하시겠습니까?")
+        cc1, cc2, cc3, cc4 = st.columns(4)
         with cc1:
-            if st.button("🔄 내용 수정·재작성", use_container_width=True):
-                del st.session_state.last_report
-                st.rerun()
+            if st.button("✅ FAQ로 해결됨", use_container_width=True, type="primary"):
+                st.session_state.pop("last_report", None)
+                st.session_state.pop("last_faqs", None)
+                st.success("학교에 연락하지 않고 해결되어 모두에게 도움이 됐어요. 🌱")
+                st.balloons()
+                st.stop()
         with cc2:
-            if st.button("❌ 민원 제출 취소", use_container_width=True):
-                del st.session_state.last_report
-                st.success("민원 제출을 취소했습니다. 신중한 판단 감사합니다.")
+            if st.button("🔄 다시 작성", use_container_width=True):
+                st.session_state.pop("last_report", None)
+                st.session_state.pop("last_faqs", None)
                 st.rerun()
         with cc3:
-            if st.button("📨 학교에 정식 제출 (분석 리포트 동봉)",
-                         use_container_width=True, type="primary"):
+            if st.button("❌ 민원 제출 취소", use_container_width=True):
+                st.session_state.pop("last_report", None)
+                st.session_state.pop("last_faqs", None)
+                st.success("민원 제출을 취소했습니다. 신중한 판단 감사합니다.")
+                st.rerun()
+        with cc4:
+            if st.button("📨 정식 제출 (리포트 동봉)",
+                         use_container_width=True, type="secondary"):
                 st.session_state.inbox.append(r)
-                st.success(f"학교 접수함에 전달했습니다. (현재 접수: {len(st.session_state.inbox)}건)")
+                st.success(f"학교 접수함에 전달. 현재 {len(st.session_state.inbox)}건")
 
 # =========================================================
 # 2. 학교 모드
@@ -258,45 +389,50 @@ elif mode.startswith("🏛"):
 # 4. 시스템 소개
 # =========================================================
 else:
-    st.title("ℹ️ 학교 민원 AI 게이트웨이 — 시스템 소개")
+    st.title("ℹ️ 학교 민원 AI 도우미 + 게이트웨이 — 시스템 소개")
     st.markdown(
         """
 ## 🎯 무엇을 푸는가
-2023 서이초 사건 이후 교사들은 학부모 악성 민원에 직접 노출되어 있습니다.
-교육부는 2024년 교권보호5법, 2025년 학교민원 응답시스템을 추진 중이지만,
-**민원이 학교에 도달하기 전 단계의 AI 필터링은 없습니다.**
+2023 서이초 사건 이후 교사는 악성 민원에 노출되고, 학부모는 어디에 어떻게 물어볼지 모릅니다.
+교육부는 2024년 교권보호5법·2025년 학교민원시스템을 추진 중이지만, **민원 입수 단계의 AI는 없습니다.**
 
-본 시스템은 학부모-학교 사이에 **AI 게이트웨이**를 두어:
+본 시스템은 학부모-학교 사이에 **AI 도우미 + 게이트웨이**를 두어:
 
 | 단계 | 누가 | 무엇을 |
 |---|---|---|
-| 1 | 학부모 | 게이트웨이에 민원 입력 |
-| 2 | AI | 분류 (정당/모호/악성 위험) + 위험도 점수 |
-| 3 | AI | 유사 과거 사례 검색 (RAG) |
-| 4 | 학부모 | 자가 점검 후 진행 여부 결정 |
-| 5 | AI | 진행 시 학교용 분석 리포트 자동 생성 |
-| 6 | 학교 | 리포트 기반 차분한 대응 |
+| 1 | 학부모 | 게이트웨이에 질문·요청 입력 |
+| 2 | AI | **🏫 학교 표준 답변(FAQ) 즉시 제공** ← 메인 기능 |
+| 3 | 학부모 | "해결됨" 자체 종료 OR "정식 민원 검토" 선택 |
+| 4 | AI | 정식 민원 검토 시: 분류 + 유사 사례 + 위험도 |
+| 5 | 학부모 | 자가 점검 후 제출 결정 |
+| 6 | AI | 제출 시 학교용 분석 리포트 자동 생성 |
+| 7 | 학교 | 리포트 기반 차분한 대응 |
 
-→ **교사 보호 + 학부모 만족 + 교권 침해 사전 예방**
+→ **학부모 정보 만족 + 충동 민원 자체 종료 + 교사 보호 + 진짜 민원만 학교 도달**
 
 ## 📊 활용 교육 공공데이터
 
 | # | 데이터셋 | 출처 | 용도 |
 |---|---|---|---|
-| 1 | 교육부 교권보호위원회 개최 현황 | data.go.kr 15137983 | 시도별 추이 + 정책 효과 측정 |
-| 2 | NEIS 학원교습소정보 (138,259건) | open.neis.go.kr | 학교 인근 학원 환경 변수 |
-| 3 | KOSIS 사교육비조사 17년 시계열 | kosis.kr DT_1PE105 | 사교육 격차 ↔ 교권 침해 가설 검증 |
+| 1 | 교육부 교권보호위원회 개최 현황 | data.go.kr 15137983 | 시계열 + 정책 효과 측정 |
+| 2 | 교육부 2024 교육활동 침해 실태조사 | korea.kr 156688735 | 학교급·유형·가해주체별 진본 |
+| 3 | NEIS 학원교습소정보 (138,259건) | open.neis.go.kr | 학교 인근 환경 변수 |
+| 4 | KOSIS 사교육비조사 (2009~2025) | kosis.kr DT_1PE105 | 학습 부담 ↔ 민원 발생 가설 |
 
 ## 🤖 AI 모델 4종
 
-1. **민원 분류기** — TF-IDF + cosine, 카테고리 11종
-2. **유사 사례 RAG 검색** — 임베딩, Top-3 사례 + 판정 근거
-3. **위험도 평가 + 리포트 생성기** — 룰베이스 + 템플릿
-4. **시도별 5년 예측** — Holt-Winters 지수평활
+1. **학교 FAQ 매처** — TF-IDF + cosine, 30개 FAQ에서 Top 3 즉시 답변
+2. **민원 분류기** — 카테고리 11종 (정당/모호/악성)
+3. **유사 사례 RAG 검색** — 30건 사례 라이브러리, Top 3 + 판정·근거
+4. **위험도 평가 + 리포트 생성** — 룰 + 템플릿, 학교 단계별 권장 절차
 
-## ✅ 기대효과
-- 교사 1인당 악성 민원 노출 감소 → **교권 보호**
-- 학부모의 충동적·과도한 민원 사전 자가 점검 → **건강한 학교·가정 관계**
-- 교육청은 시도별 추이 모니터링 → **선제적 정책**
+## ✅ 기대 효과
+
+| 사용자 | 효과 |
+|---|---|
+| 학부모 | "내 질문에 즉시 답을 주는 도우미" — 정보 만족 + 학교 방문 부담 ↓ |
+| 교사 | 악성 민원 직접 노출 ↓ + 정당한 민원만 분석 리포트와 함께 도달 |
+| 학교장 | 리포트 기반 사전 검토 + 표준 대응 절차 자동 안내 |
+| 교육청 | 시도별 추이 모니터링 + 정책 효과 측정 |
         """
     )
