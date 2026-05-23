@@ -1,5 +1,6 @@
 02_analysis/.env
-01_data/
+01_data/neis_per_sido/
+01_data/kw/*.hwpx
 03_visual/cache/
 __pycache__/
 *.pyc
