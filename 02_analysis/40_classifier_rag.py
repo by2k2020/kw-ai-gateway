@@ -75,12 +75,21 @@ def classify(text: str, top_k: int = 3):
     }
 
 
-def risk_to_label(risk: float) -> tuple[str, str]:
-    """위험도 점수 → 라벨 + 권고."""
-    if risk >= 0.65:
+def risk_to_label(risk: float, category: str = "") -> tuple[str, str]:
+    """위험도 점수 + 카테고리 → 라벨 + 권고.
+
+    카테고리가 '악성'이면 위험도가 낮아도 최소 '주의' 표시 (일관성).
+    카테고리가 '모호'이면 위험도와 관계없이 '대화 권장'.
+    """
+    has_malicious = "악성" in (category or "")
+    has_ambiguous = "모호" in (category or "")
+
+    if risk >= 0.65 or (has_malicious and risk >= 0.45):
         return "🚫 악성 위험 — 교권침해 사례 매우 유사", "민원 제출 전 자가 점검을 강력 권장합니다."
-    if risk >= 0.45:
+    if risk >= 0.45 or (has_malicious and risk >= 0.25):
         return "⚠️ 주의 — 표현·내용 검토 필요", "사실 확인·표현 다듬기 권장."
+    if has_ambiguous:
+        return "💬 모호 — 사실 확인·대화 권장", "구체 사실 확인 후 담임 면담 등 1차 절차 권장."
     return "✅ 정당한 민원으로 분류", "특별한 위험 신호 없음. 학교에 정식 제출 가능합니다."
 
 

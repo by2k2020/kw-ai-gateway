@@ -220,18 +220,21 @@ if mode.startswith("👨"):
         st.caption("같은 내용이 학교에 정식 민원으로 갔을 때 교권 침해 사례에 해당할 가능성을 분석합니다.")
 
         risk = r["risk_score"]
-        color = "🔴" if risk >= 0.6 else ("🟡" if risk >= 0.3 else "🟢")
+        label_text = r["risk_label"]
+        is_high = "악성 위험" in label_text
+        is_mid = "주의" in label_text or "모호" in label_text
+        color = "🔴" if is_high else ("🟡" if is_mid else "🟢")
         k1, k2, k3 = st.columns(3)
         k1.metric("교권침해 위험도", f"{color} {risk:.2f} / 1.00")
         k2.metric("AI 분류", r["predicted_category"])
         k3.metric("긴급도", r["urgency"])
 
-        if risk >= 0.6:
-            st.error(f"**{r['risk_label']}**\n\n{r['recommend_self_check']}")
-        elif risk >= 0.3:
-            st.warning(f"**{r['risk_label']}**\n\n{r['recommend_self_check']}")
+        if is_high:
+            st.error(f"**{label_text}**\n\n{r['recommend_self_check']}")
+        elif is_mid:
+            st.warning(f"**{label_text}**\n\n{r['recommend_self_check']}")
         else:
-            st.success(f"**{r['risk_label']}**\n\n{r['recommend_self_check']}")
+            st.success(f"**{label_text}**\n\n{r['recommend_self_check']}")
 
         with st.expander("📚 과거 교권보호위 유사 사례 Top 3 보기"):
             for i, c in enumerate(r["similar_cases"], 1):

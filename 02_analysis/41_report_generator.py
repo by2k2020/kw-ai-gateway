@@ -23,7 +23,7 @@ def generate_report(complaint_text: str, parent_name: str = "익명",
                     student_grade: str = "미입력") -> dict:
     result = _clf.classify(complaint_text, top_k=3)
     risk = result["risk_score"]
-    label, recommend = _clf.risk_to_label(risk)
+    label, recommend = _clf.risk_to_label(risk, result["predicted_category"])
 
     urgencies = [c["urgency"] for c in result["top_cases"]]
     urgency = min(urgencies, key=lambda u: URGENCY_PRIORITY.get(u, 9))
