@@ -27,6 +27,7 @@ rep = _load("rep", ANALYSIS / "41_report_generator.py")
 faq = _load("faq", ANALYSIS / "42_faq_matcher.py")
 llm = _load("llm", ANALYSIS / "43_llm_answer.py")
 sch = _load("sch", ANALYSIS / "44_school_data.py")
+rag = _load("rag", ANALYSIS / "45_rag_classifier.py")
 
 
 @st.cache_data(show_spinner=False, ttl=3600)
@@ -42,6 +43,11 @@ def cached_schedule(school_dict_str: str, from_ymd: str, to_ymd: str):
 @st.cache_data(show_spinner=False, ttl=600)
 def cached_meal(school_dict_str: str, from_ymd: str, to_ymd: str):
     return sch.get_meal(json.loads(school_dict_str), from_ymd, to_ymd)
+
+
+@st.cache_data(show_spinner=False, ttl=3600)
+def cached_rag(query: str) -> dict:
+    return rag.smart_rag_answer(query)
 
 
 @st.cache_data(show_spinner=False)
@@ -129,15 +135,16 @@ if mode.startswith("👨"):
         if not complaint.strip():
             st.error("내용을 입력해 주세요.")
         else:
-            with st.spinner("학교 데이터 검색 + AI 답변 생성 중..."):
-                smart = cached_smart_answer(complaint)
-                report = rep.generate_report(complaint, parent_name, grade)
-            st.session_state.last_smart = smart
-            st.session_state.last_report = report
+            with st.spinner("의미 기반 사례 검색 + AI 분류·답변 생성 중..."):
+                rag_res = cached_rag(complaint)
+                # 학교 FAQ 별도 검색 (RAG와 별개로 표준 답변 박스)
+                faqs = faq.find_faqs(complaint, top_k=3)
+            st.session_state.last_rag = rag_res
+            st.session_state.last_faqs = faqs
 
-    if "last_report" in st.session_state:
-        smart = st.session_state.get("last_smart", {})
-        r = st.session_state.last_report
+    if "last_rag" in st.session_state:
+        rag_res = st.session_state.last_rag
+        faqs = st.session_state.get("last_faqs", [])
         school = st.session_state.get("school")
 
         st.markdown("---")
@@ -182,10 +189,12 @@ if mode.startswith("👨"):
 
         SRC_ICON = {"FAQ": "📖", "공지사항": "📢", "가정통신문": "📨",
                     "학교 운영 매뉴얼": "📋"}
-        if mode == "faq" and faqs:
-            st.markdown("## 🏫 학교의 표준 답변 — 이 내용으로 해결되시나요?")
-            st.caption("🗂️ 학교 FAQ·공지·가정통신문에서 강하게 매칭됨 (관련도 0.30 이상)")
-            for i, f in enumerate(faqs, 1):
+
+        # ===== STEP 1: 학교 표준 답변 (FAQ 매칭 시) =====
+        if faqs:
+            st.markdown("## 🏫 학교의 표준 답변")
+            st.caption("🗂️ 학교 FAQ·공지·가정통신문에서 강매칭 (관련도 0.30+)")
+            for i, f in enumerate(faqs[:2], 1):
                 src = f.get("source", "FAQ")
                 icon = SRC_ICON.get(src, "📄")
                 with st.container(border=True):
@@ -195,81 +204,79 @@ if mode.startswith("👨"):
                         st.markdown(f"**🔗**: {f['link']}")
                     st.caption(f"카테고리: {f['category']}  ·  관련도: {f['similarity']:.2f}")
 
-        elif llm_res and llm_res.get("answer"):
-            st.markdown("## 🤖 AI 도우미 답변")
-            tag = "FAQ + AI 보강" if mode == "llm_with_faq" else "AI 직접 답변"
-            st.caption(f"🧠 {tag}  ·  모델: {llm_res.get('model', '-')}  "
-                       f"·  토큰: in {llm_res.get('input_tokens', '-')} / out {llm_res.get('output_tokens', '-')}")
+        # ===== STEP 2: RAG 분류기 답변 =====
+        if rag_res.get("error"):
+            st.error(f"AI 답변 생성 실패: {rag_res['error']}")
+        else:
+            st.markdown("---")
+            st.markdown("## 🤖 AI 도우미 답변 (RAG)")
+            st.caption(
+                f"🧠 KR-SBERT 의미 검색 + Claude Haiku 분류·답변 통합  ·  "
+                f"토큰 in {rag_res.get('input_tokens','-')} / out {rag_res.get('output_tokens','-')}"
+            )
             with st.container(border=True):
-                st.markdown(llm_res["answer"])
+                st.markdown(rag_res["answer"])
 
-            if faqs:
-                with st.expander(f"📚 AI가 참고한 학교 자료 {len(faqs)}건 보기"):
-                    for f in faqs:
-                        src = f.get("source", "FAQ")
-                        icon = SRC_ICON.get(src, "📄")
-                        st.markdown(f"**{icon} [{src}] {f['question']}** (관련도 {f['similarity']:.2f})")
-                        st.write(f"- {f['answer']}")
-        else:
-            err = llm_res.get("error") if llm_res else "데이터 없음"
-            st.warning(f"AI 답변을 생성하지 못했습니다 ({err}). 아래 교권 침해 사전 점검을 참고해 주세요.")
+            with st.expander("📚 AI가 참고한 유사 사례 Top 5 (의미 검색)"):
+                for c in rag_res.get("top_cases", []):
+                    st.markdown(f"**[{c['category']}]** (유사도 {c['similarity']:.2f})")
+                    st.write(f"- 사례: {c['text']}")
+                    st.write(f"- 판정: {c['verdict']}")
+                    st.write(f"- 근거: {c['rationale']}")
+                    st.markdown("---")
 
-        # ===== STEP 2: 교권 침해 사전 점검 (항상 표시) =====
-        st.markdown("---")
-        st.markdown("## 🛡️ 교권 침해 사전 점검")
-        st.caption("같은 내용이 학교에 정식 민원으로 갔을 때 교권 침해 사례에 해당할 가능성을 분석합니다.")
+        # ===== STEP 3: 교권 침해 사전 점검 (RAG 결과 기반) =====
+        if not rag_res.get("error"):
+            st.markdown("---")
+            st.markdown("## 🛡️ 교권 침해 사전 점검")
+            st.caption("RAG 분류 결과 — AI가 의미·맥락을 함께 판단합니다.")
 
-        risk = r["risk_score"]
-        label_text = r["risk_label"]
-        is_high = "악성 위험" in label_text
-        is_mid = "주의" in label_text or "모호" in label_text
-        color = "🔴" if is_high else ("🟡" if is_mid else "🟢")
-        k1, k2, k3 = st.columns(3)
-        k1.metric("교권침해 위험도", f"{color} {risk:.2f} / 1.00")
-        k2.metric("AI 분류", r["predicted_category"])
-        k3.metric("긴급도", r["urgency"])
+            risk = rag_res["risk_score"]
+            category = rag_res["category"]
+            is_high = "악성" in category and risk >= 0.5
+            is_mid = "모호" in category or (("악성" in category) and risk < 0.5) or (0.3 <= risk < 0.5)
+            color = "🔴" if is_high else ("🟡" if is_mid else "🟢")
+            k1, k2 = st.columns([1, 2])
+            k1.metric("교권침해 위험도", f"{color} {risk:.2f} / 1.00")
+            k2.metric("AI 분류", category)
 
-        if is_high:
-            st.error(f"**{label_text}**\n\n{r['recommend_self_check']}")
-        elif is_mid:
-            st.warning(f"**{label_text}**\n\n{r['recommend_self_check']}")
-        else:
-            st.success(f"**{label_text}**\n\n{r['recommend_self_check']}")
+            reasoning = rag_res.get("reasoning", "")
+            if is_high:
+                st.error(f"🚫 **악성 위험** — 교권 침해 가능성 높음\n\n**근거**: {reasoning}")
+            elif is_mid:
+                st.warning(f"⚠️ **주의** — 검토 필요\n\n**근거**: {reasoning}")
+            else:
+                st.success(f"✅ **정당한 민원**\n\n**근거**: {reasoning}")
 
-        with st.expander("📚 과거 교권보호위 유사 사례 Top 3 보기"):
-            for i, c in enumerate(r["similar_cases"], 1):
-                st.markdown(f"**{i}. [{c['category']}]  유사도 {c['similarity']:.2f}**")
-                st.write(f"- 사례: {c['text']}")
-                st.write(f"- 판정: {c['verdict']}")
-                st.write(f"- 근거: {c['rationale']}")
-                st.markdown("---")
-
-        # ===== STEP 3: 진행 결정 =====
+        # ===== STEP 4: 진행 결정 =====
         st.markdown("---")
         st.markdown("### 🚦 이제 어떻게 하시겠습니까?")
         cc1, cc2, cc3, cc4 = st.columns(4)
         with cc1:
-            if st.button("✅ FAQ로 해결됨", use_container_width=True, type="primary"):
-                st.session_state.pop("last_report", None)
+            if st.button("✅ 답변 봤어요 해결됨", use_container_width=True, type="primary"):
+                st.session_state.pop("last_rag", None)
                 st.session_state.pop("last_faqs", None)
                 st.success("학교에 연락하지 않고 해결되어 모두에게 도움이 됐어요. 🌱")
                 st.balloons()
                 st.stop()
         with cc2:
             if st.button("🔄 다시 작성", use_container_width=True):
-                st.session_state.pop("last_report", None)
+                st.session_state.pop("last_rag", None)
                 st.session_state.pop("last_faqs", None)
                 st.rerun()
         with cc3:
             if st.button("❌ 민원 제출 취소", use_container_width=True):
-                st.session_state.pop("last_report", None)
+                st.session_state.pop("last_rag", None)
                 st.session_state.pop("last_faqs", None)
                 st.success("민원 제출을 취소했습니다. 신중한 판단 감사합니다.")
                 st.rerun()
         with cc4:
             if st.button("📨 정식 제출 (리포트 동봉)",
                          use_container_width=True, type="secondary"):
-                st.session_state.inbox.append(r)
+                # 학교 모드용 리포트 생성 (분류기 기반)
+                report = rep.generate_report(complaint or "", parent_name, grade)
+                report["rag"] = rag_res  # RAG 결과 첨부
+                st.session_state.inbox.append(report)
                 st.success(f"학교 접수함에 전달. 현재 {len(st.session_state.inbox)}건")
 
 # =========================================================
