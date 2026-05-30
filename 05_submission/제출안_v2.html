@@ -9,32 +9,38 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap">
 <style>
 :root {
-  --bg: #FFFFFF;
-  --ink: #0B1320;
-  --ink-soft: #3B4658;
-  --ink-mute: #6B7280;
-  --line: #E5E7EB;
-  --line-soft: #F3F4F6;
-  --panel: #0B1320;
-  --panel-2: #111827;
-  --cyan: #00B4D8;
-  --cyan-dim: #0096C7;
-  --green: #10B981;
-  --red: #EF4444;
-  --amber: #F59E0B;
-  --grid: rgba(255,255,255,0.06);
+ --bg: #FFFFFF;
+ --ink: #0B1320;
+ --ink-soft: #3B4658;
+ --ink-mute: #6B7280;
+ --line: #E5E7EB;
+ --line-soft: #F3F4F6;
+ --panel: #0B1320;
+ --panel-2: #111827;
+ --cyan: #00B4D8;
+ --cyan-dim: #0096C7;
+ --green: #10B981;
+ --red: #EF4444;
+ --amber: #F59E0B;
+ --grid: rgba(255,255,255,0.06);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* 한국전기안전공사 전기안전체 (공공누리 1유형, 사용자 PC 설치 시 자동 인식) */
+@font-face {
+ font-family: 'JeonggiAnseon';
+ src: local('JeonggiAnseon'), local('전기안전체'), local('JeongiAnjeon');
+ font-display: swap;
+}
 html, body {
-  font-family: 'Inter', 'Pretendard', 'Malgun Gothic', system-ui, sans-serif;
-  font-weight: 400;
-  color: var(--ink);
-  background: #2A2F3A;
-  -webkit-font-smoothing: antialiased;
-  line-height: 1.4;
-  letter-spacing: -0.01em;
+ font-family: 'JeonggiAnseon', '전기안전체', 'Inter', 'Pretendard', 'Malgun Gothic', system-ui, sans-serif;
+ font-weight: 400;
+ color: var(--ink);
+ background: #2A2F3A;
+ -webkit-font-smoothing: antialiased;
+ line-height: 1.4;
+ letter-spacing: -0.01em;
 }
 
 .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; letter-spacing: -0.02em; }
@@ -43,190 +49,192 @@ html, body {
 @page { size: A4 landscape; margin: 0; }
 
 .slide {
-  width: 297mm; height: 210mm;
-  background: var(--bg);
-  position: relative;
-  overflow: hidden;
-  page-break-after: always;
-  page-break-inside: avoid;
-  margin: 8mm auto;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-  display: grid;
-  grid-template-rows: 12mm 1fr 8mm;
+ width: 297mm; height: 210mm;
+ background: var(--bg);
+ position: relative;
+ overflow: hidden;
+ page-break-after: always;
+ page-break-inside: avoid;
+ margin: 8mm auto;
+ box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+ display: grid;
+ grid-template-rows: 12mm 1fr 8mm;
 }
 
 @media print {
-  body { background: white; }
-  .slide { margin: 0; box-shadow: none; }
+ body { background: white; }
+ .slide { margin: 0; box-shadow: none; }
 }
 
 /* ===== 헤더바 (좌: 브랜드, 우: 페이지) ===== */
 .hdr {
-  background: var(--panel);
-  color: white;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  padding: 0 12mm;
-  gap: 8mm;
-  position: relative;
+ background: var(--panel);
+ color: white;
+ display: grid;
+ grid-template-columns: auto 1fr auto;
+ align-items: center;
+ padding: 0 12mm;
+ gap: 8mm;
+ position: relative;
 }
 .hdr::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 0.5mm;
-  background: var(--cyan);
+ content: '';
+ position: absolute;
+ left: 0; right: 0; bottom: 0;
+ height: 0.5mm;
+ background: var(--cyan);
 }
 .hdr .brand {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11pt;
-  letter-spacing: 0.15em;
-  color: var(--cyan);
-  font-weight: 600;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11pt;
+ letter-spacing: 0.15em;
+ color: var(--cyan);
+ font-weight: 600;
 }
 .hdr .crumb {
-  font-size: 11pt;
-  color: rgba(255,255,255,0.6);
-  font-weight: 400;
+ font-size: 11pt;
+ color: rgba(255,255,255,0.6);
+ font-weight: 400;
 }
 .hdr .page-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11pt;
-  color: white;
-  font-weight: 600;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11pt;
+ color: white;
+ font-weight: 600;
 }
 .hdr .page-num span { color: rgba(255,255,255,0.4); }
 
 /* ===== 푸터 ===== */
 .ftr {
-  background: var(--line-soft);
-  color: var(--ink-mute);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 12mm;
-  font-size: 11pt;
-  font-family: 'JetBrains Mono', monospace;
-  border-top: 0.25mm solid var(--line);
+ background: var(--line-soft);
+ color: var(--ink-mute);
+ display: flex; align-items: center; justify-content: space-between;
+ padding: 0 12mm;
+ font-size: 11pt;
+ font-family: 'JetBrains Mono', monospace;
+ border-top: 0.25mm solid var(--line);
 }
 
-/* ===== 본문 ===== */
-.body { padding: 9mm 12mm; display: flex; flex-direction: column; }
+/* ===== 본문 (빈 공간 자동 분배 — justify-content: space-between) ===== */
+.body { padding: 9mm 12mm 11mm; display: flex; flex-direction: column; gap: 4mm; }
+.body > *:last-child { margin-top: auto; }
+.body .fill { flex: 1; display: flex; flex-direction: column; gap: 4mm; }
 
 .eyebrow {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11pt;
-  color: var(--cyan-dim);
-  letter-spacing: 0.18em;
-  margin-bottom: 2mm;
-  font-weight: 600;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11pt;
+ color: var(--cyan-dim);
+ letter-spacing: 0.18em;
+ margin-bottom: 2mm;
+ font-weight: 600;
 }
 .title {
-  font-size: 26pt;
-  font-weight: 800;
-  color: var(--ink);
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  margin-bottom: 3mm;
+ font-size: 26pt;
+ font-weight: 800;
+ color: var(--ink);
+ letter-spacing: -0.03em;
+ line-height: 1.05;
+ margin-bottom: 3mm;
 }
 .subtitle {
-  font-size: 13pt;
-  color: var(--ink-soft);
-  font-weight: 400;
-  line-height: 1.4;
-  margin-bottom: 6mm;
-  border-left: 1mm solid var(--cyan);
-  padding-left: 4mm;
+ font-size: 13pt;
+ color: var(--ink-soft);
+ font-weight: 400;
+ line-height: 1.4;
+ margin-bottom: 6mm;
+ border-left: 1mm solid var(--cyan);
+ padding-left: 4mm;
 }
 
 /* ===== 표지 ===== */
 .cover-slide {
-  background: var(--panel);
-  color: white;
-  grid-template-rows: 1fr;
+ background: var(--panel);
+ color: white;
+ grid-template-rows: 1fr;
 }
 .cover-slide .hdr, .cover-slide .ftr { display: none; }
 .cover-bg {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 8mm 8mm;
-  background-position: 0 0;
+ position: absolute; inset: 0;
+ background-image:
+ linear-gradient(var(--grid) 1px, transparent 1px),
+ linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+ background-size: 8mm 8mm;
+ background-position: 0 0;
 }
 .cover-bg::after {
-  content: '';
-  position: absolute;
-  top: 30%; right: -100mm;
-  width: 250mm; height: 250mm;
-  background: radial-gradient(circle, rgba(0,180,216,0.18) 0%, transparent 60%);
+ content: '';
+ position: absolute;
+ top: 30%; right: -100mm;
+ width: 250mm; height: 250mm;
+ background: radial-gradient(circle, rgba(0,180,216,0.18) 0%, transparent 60%);
 }
 .cover-content {
-  position: relative;
-  padding: 28mm 22mm;
-  height: 100%;
-  display: flex; flex-direction: column; justify-content: center;
+ position: relative;
+ padding: 28mm 22mm;
+ height: 100%;
+ display: flex; flex-direction: column; justify-content: center;
 }
 .cover .badges { display: flex; gap: 3mm; margin-bottom: 8mm; }
 .cover .badge {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9pt;
-  letter-spacing: 0.12em;
-  color: var(--cyan);
-  border: 0.3mm solid var(--cyan);
-  padding: 1.5mm 4mm;
-  border-radius: 1mm;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 9pt;
+ letter-spacing: 0.12em;
+ color: var(--cyan);
+ border: 0.3mm solid var(--cyan);
+ padding: 1.5mm 4mm;
+ border-radius: 1mm;
 }
 .cover .badge.dim {
-  color: rgba(255,255,255,0.5);
-  border-color: rgba(255,255,255,0.2);
+ color: rgba(255,255,255,0.5);
+ border-color: rgba(255,255,255,0.2);
 }
 .cover h1 {
-  font-size: 64pt;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.0;
-  margin-bottom: 10mm;
-  color: white;
+ font-size: 64pt;
+ font-weight: 800;
+ letter-spacing: -0.04em;
+ line-height: 1.0;
+ margin-bottom: 10mm;
+ color: white;
 }
 .cover h1 .accent { color: var(--cyan); }
 .cover .lead {
-  font-size: 18pt;
-  font-weight: 400;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 4mm;
+ font-size: 18pt;
+ font-weight: 400;
+ color: rgba(255,255,255,0.7);
+ margin-bottom: 4mm;
 }
 .cover .keywords {
-  display: flex; gap: 5mm; flex-wrap: wrap;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10pt;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 18mm;
-  letter-spacing: 0.05em;
+ display: flex; gap: 5mm; flex-wrap: wrap;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 10pt;
+ color: rgba(255,255,255,0.5);
+ margin-bottom: 18mm;
+ letter-spacing: 0.05em;
 }
 .cover .url-block {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12pt;
-  color: var(--cyan);
-  padding: 4mm 6mm;
-  border: 0.3mm solid var(--cyan);
-  border-radius: 2mm;
-  background: rgba(0,180,216,0.06);
-  width: fit-content;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 12pt;
+ color: var(--cyan);
+ padding: 4mm 6mm;
+ border: 0.3mm solid var(--cyan);
+ border-radius: 2mm;
+ background: rgba(0,180,216,0.06);
+ width: fit-content;
 }
 .cover .meta-row {
-  position: absolute;
-  bottom: 14mm; left: 22mm; right: 22mm;
-  display: flex; justify-content: space-between; align-items: end;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9pt;
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 0.08em;
+ position: absolute;
+ bottom: 14mm; left: 22mm; right: 22mm;
+ display: flex; justify-content: space-between; align-items: end;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 9pt;
+ color: rgba(255,255,255,0.4);
+ letter-spacing: 0.08em;
 }
 
 /* ===== 메트릭 카드 ===== */
 .metric-grid {
-  display: grid;
-  gap: 4mm;
+ display: grid;
+ gap: 4mm;
 }
 .metric-grid.c4 { grid-template-columns: repeat(4, 1fr); }
 .metric-grid.c3 { grid-template-columns: repeat(3, 1fr); }
@@ -234,16 +242,16 @@ html, body {
 .metric-grid.c5 { grid-template-columns: repeat(5, 1fr); }
 
 .metric {
-  border: 0.3mm solid var(--line);
-  border-radius: 2mm;
-  padding: 5mm;
-  position: relative;
-  background: white;
+ border: 0.3mm solid var(--line);
+ border-radius: 2mm;
+ padding: 5mm;
+ position: relative;
+ background: white;
 }
 .metric.dark {
-  background: var(--panel);
-  border-color: var(--panel);
-  color: white;
+ background: var(--panel);
+ border-color: var(--panel);
+ color: white;
 }
 .metric.dark .m-label { color: rgba(255,255,255,0.5); }
 .metric.dark .m-value { color: var(--cyan); }
@@ -254,65 +262,65 @@ html, body {
 .metric.green { border-color: var(--green); }
 .metric.green .m-value { color: var(--green); }
 .m-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11pt;
-  color: var(--ink-mute);
-  letter-spacing: 0.1em;
-  margin-bottom: 2mm;
-  font-weight: 600;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11pt;
+ color: var(--ink-mute);
+ letter-spacing: 0.1em;
+ margin-bottom: 2mm;
+ font-weight: 600;
 }
 .m-value {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 24pt;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.04em;
-  line-height: 1;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 24pt;
+ font-weight: 700;
+ color: var(--ink);
+ letter-spacing: -0.04em;
+ line-height: 1;
 }
 .m-delta {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8pt;
-  color: var(--ink-mute);
-  margin-top: 2mm;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 8pt;
+ color: var(--ink-mute);
+ margin-top: 2mm;
 }
 .m-delta.up { color: var(--green); }
 .m-delta.down { color: var(--red); }
 
 /* ===== 표 ===== */
 table.data {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 10pt;
-  margin-top: 2mm;
+ width: 100%;
+ border-collapse: collapse;
+ font-size: 10pt;
+ margin-top: 2mm;
 }
 table.data thead { background: var(--panel); }
 table.data thead th {
-  color: white;
-  text-align: left;
-  padding: 3mm 4mm;
-  font-weight: 600;
-  font-size: 9pt;
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.05em;
+ color: white;
+ text-align: left;
+ padding: 3mm 4mm;
+ font-weight: 600;
+ font-size: 9pt;
+ font-family: 'JetBrains Mono', monospace;
+ letter-spacing: 0.05em;
 }
 table.data tbody td {
-  padding: 3mm 4mm;
-  border-bottom: 0.2mm solid var(--line);
-  font-size: 10pt;
-  vertical-align: top;
+ padding: 3mm 4mm;
+ border-bottom: 0.2mm solid var(--line);
+ font-size: 10pt;
+ vertical-align: top;
 }
 table.data tbody tr:last-child td { border-bottom: none; }
 table.data .num { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
 table.data .tag {
-  display: inline-block;
-  padding: 0.5mm 2mm;
-  border-radius: 1mm;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8pt;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  background: var(--line);
-  color: var(--ink);
+ display: inline-block;
+ padding: 0.5mm 2mm;
+ border-radius: 1mm;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 8pt;
+ font-weight: 600;
+ letter-spacing: 0.05em;
+ background: var(--line);
+ color: var(--ink);
 }
 table.data .tag.cyan { background: var(--cyan); color: white; }
 table.data .tag.green { background: var(--green); color: white; }
@@ -320,10 +328,10 @@ table.data .tag.red { background: var(--red); color: white; }
 
 /* ===== 카드 ===== */
 .card {
-  border: 0.3mm solid var(--line);
-  border-radius: 2mm;
-  padding: 5mm;
-  background: white;
+ border: 0.3mm solid var(--line);
+ border-radius: 2mm;
+ padding: 5mm;
+ background: white;
 }
 .card.dark { background: var(--panel); color: white; border-color: var(--panel); }
 .card.dark h3, .card.dark p, .card.dark li, .card.dark span, .card.dark strong { color: white !important; }
@@ -332,14 +340,14 @@ table.data .tag.red { background: var(--red); color: white; }
 
 /* ===== Lucide SVG 아이콘 (ISC 라이선스, 상업 무료) ===== */
 .ic {
-  display: inline-block;
-  vertical-align: -2px;
-  width: 14px; height: 14px;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  fill: none;
-  stroke: currentColor;
+ display: inline-block;
+ vertical-align: -2px;
+ width: 14px; height: 14px;
+ stroke-width: 2;
+ stroke-linecap: round;
+ stroke-linejoin: round;
+ fill: none;
+ stroke: currentColor;
 }
 .ic.lg { width: 18px; height: 18px; }
 .ic.xl { width: 26px; height: 26px; vertical-align: -5px; }
@@ -351,71 +359,71 @@ table.data .tag.red { background: var(--red); color: white; }
 .card.red { border-left: 1.2mm solid var(--red); }
 .card.green { border-left: 1.2mm solid var(--green); }
 .card h3 {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9pt;
-  color: var(--ink-mute);
-  letter-spacing: 0.12em;
-  margin-bottom: 3mm;
-  font-weight: 600;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 9pt;
+ color: var(--ink-mute);
+ letter-spacing: 0.12em;
+ margin-bottom: 3mm;
+ font-weight: 600;
 }
 .card p { font-size: 11pt; line-height: 1.45; color: var(--ink); }
 
 /* ===== bullets ===== */
 ul.bullets { list-style: none; padding: 0; margin: 0; }
 ul.bullets li {
-  font-size: 12pt;
-  padding: 1mm 0 1mm 7mm;
-  position: relative;
-  color: var(--ink);
-  line-height: 1.4;
+ font-size: 12pt;
+ padding: 1mm 0 1mm 7mm;
+ position: relative;
+ color: var(--ink);
+ line-height: 1.4;
 }
 ul.bullets li::before {
-  content: '▸';
-  position: absolute;
-  left: 0; top: 1mm;
-  color: var(--cyan);
-  font-weight: 700;
+ content: '▸';
+ position: absolute;
+ left: 0; top: 1mm;
+ color: var(--cyan);
+ font-weight: 700;
 }
 ul.bullets.tight li { font-size: 11pt; }
 
 /* ===== 흐름도 ===== */
 .flow {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1.5mm;
+ display: grid;
+ grid-template-columns: repeat(7, 1fr);
+ gap: 1.5mm;
 }
 .flow .node {
-  padding: 4mm 3mm;
-  border-radius: 2mm;
-  text-align: center;
-  position: relative;
-  min-height: 28mm;
-  display: flex; flex-direction: column; justify-content: center;
+ padding: 4mm 3mm;
+ border-radius: 2mm;
+ text-align: center;
+ position: relative;
+ min-height: 28mm;
+ display: flex; flex-direction: column; justify-content: center;
 }
 .flow .node.input { background: var(--panel); color: white; }
 .flow .node.ai { background: rgba(0,180,216,0.1); color: var(--panel); border: 0.3mm solid var(--cyan); }
 .flow .node.warn { background: rgba(239,68,68,0.08); color: var(--panel); border: 0.3mm solid var(--red); }
 .flow .node .step {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8pt;
-  letter-spacing: 0.1em;
-  color: inherit;
-  opacity: 0.7;
-  margin-bottom: 1mm;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 8pt;
+ letter-spacing: 0.1em;
+ color: inherit;
+ opacity: 0.7;
+ margin-bottom: 1mm;
 }
 .flow .node .label {
-  font-size: 11pt;
-  font-weight: 700;
-  line-height: 1.2;
+ font-size: 11pt;
+ font-weight: 700;
+ line-height: 1.2;
 }
 .flow .node + .node::before {
-  content: '→';
-  position: absolute;
-  left: -2.2mm; top: 50%;
-  transform: translateY(-50%);
-  color: var(--ink-mute);
-  font-size: 12pt;
-  font-family: 'JetBrains Mono', monospace;
+ content: '→';
+ position: absolute;
+ left: -2.2mm; top: 50%;
+ transform: translateY(-50%);
+ color: var(--ink-mute);
+ font-size: 12pt;
+ font-family: 'JetBrains Mono', monospace;
 }
 
 /* ===== two-col ===== */
@@ -425,70 +433,70 @@ ul.bullets.tight li { font-size: 11pt; }
 
 /* ===== 이미지 ===== */
 .img-frame {
-  background: var(--line-soft);
-  border: 0.3mm solid var(--line);
-  border-radius: 2mm;
-  padding: 3mm;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+ background: var(--line-soft);
+ border: 0.3mm solid var(--line);
+ border-radius: 2mm;
+ padding: 3mm;
+ display: flex; align-items: center; justify-content: center;
+ overflow: hidden;
 }
 .img-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
 /* ===== 시나리오 ===== */
 .scn {
-  background: white;
-  border: 0.3mm solid var(--line);
-  border-left: 1.2mm solid var(--ink-mute);
-  border-radius: 1mm;
-  padding: 3mm 4mm;
-  margin-bottom: 2mm;
+ background: white;
+ border: 0.3mm solid var(--line);
+ border-left: 1.2mm solid var(--ink-mute);
+ border-radius: 1mm;
+ padding: 3mm 4mm;
+ margin-bottom: 2mm;
 }
 .scn.green { border-left-color: var(--green); }
 .scn.red { border-left-color: var(--red); }
 .scn.amber { border-left-color: var(--amber); }
 .scn.cyan { border-left-color: var(--cyan); }
 .scn .hd {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8pt;
-  letter-spacing: 0.1em;
-  color: var(--ink-mute);
-  margin-bottom: 1mm;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 8pt;
+ letter-spacing: 0.1em;
+ color: var(--ink-mute);
+ margin-bottom: 1mm;
 }
 .scn .q { font-size: 10pt; color: var(--ink-soft); font-style: italic; margin-bottom: 1mm; }
 .scn .a { font-size: 11pt; font-weight: 600; color: var(--ink); }
 
 /* ===== 강조 ===== */
 .callout {
-  background: var(--panel);
-  color: white;
-  padding: 4mm 6mm;
-  border-radius: 2mm;
-  font-size: 13pt;
-  font-weight: 600;
-  display: flex; align-items: center; gap: 4mm;
+ background: var(--panel);
+ color: white;
+ padding: 4mm 6mm;
+ border-radius: 2mm;
+ font-size: 13pt;
+ font-weight: 600;
+ display: flex; align-items: center; gap: 4mm;
 }
 .callout.cyan { background: var(--cyan); }
 .callout.red { background: var(--red); }
 .callout::before {
-  content: '⬢';
-  font-size: 18pt;
-  color: var(--cyan);
+ content: '⬢';
+ font-size: 18pt;
+ color: var(--cyan);
 }
 .callout.cyan::before { color: white; }
 .callout.red::before { color: white; }
 
 /* ===== 코드 ===== */
 .code {
-  background: var(--panel);
-  color: var(--cyan);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9pt;
-  padding: 3mm 5mm;
-  border-radius: 1.5mm;
-  line-height: 1.5;
-  border-left: 1mm solid var(--cyan);
-  white-space: pre;
-  overflow-x: auto;
+ background: var(--panel);
+ color: var(--cyan);
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 9pt;
+ padding: 3mm 5mm;
+ border-radius: 1.5mm;
+ line-height: 1.5;
+ border-left: 1mm solid var(--cyan);
+ white-space: pre;
+ overflow-x: auto;
 }
 .code .k { color: #FF6B9D; }
 .code .s { color: #C0FF8E; }
@@ -496,11 +504,11 @@ ul.bullets.tight li { font-size: 11pt; }
 
 /* ===== 작은 표시 ===== */
 .dot {
-  display: inline-block;
-  width: 1.5mm; height: 1.5mm;
-  border-radius: 50%;
-  margin-right: 1mm;
-  vertical-align: middle;
+ display: inline-block;
+ width: 1.5mm; height: 1.5mm;
+ border-radius: 50%;
+ margin-right: 1mm;
+ vertical-align: middle;
 }
 .dot.green { background: var(--green); }
 .dot.red { background: var(--red); }
@@ -508,602 +516,749 @@ ul.bullets.tight li { font-size: 11pt; }
 .dot.amber { background: var(--amber); }
 
 h4.section {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11pt;
-  color: var(--ink-mute);
-  letter-spacing: 0.15em;
-  margin-bottom: 2.5mm;
-  margin-top: 3mm;
-  font-weight: 600;
-  border-bottom: 0.2mm solid var(--line);
-  padding-bottom: 1.5mm;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11pt;
+ color: var(--ink-mute);
+ letter-spacing: 0.15em;
+ margin-bottom: 2.5mm;
+ margin-top: 3mm;
+ font-weight: 600;
+ border-bottom: 0.2mm solid var(--line);
+ padding-bottom: 1.5mm;
 }
 
 .legend {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8pt;
-  color: var(--ink-mute);
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11pt;
+ color: var(--ink-mute);
 }
+
+/* ===== Pipeline v2 (slide 4) ===== */
+.pipeline2 {
+ display: grid;
+ grid-template-columns: 1.2fr 0.15fr 2.6fr 0.15fr 1.6fr;
+ gap: 0;
+ align-items: stretch;
+ flex: 1;
+}
+.stage-card {
+ border-radius: 3mm;
+ padding: 5mm 6mm;
+ display: flex; flex-direction: column;
+ position: relative;
+}
+.stage-card.input { background: var(--panel); color: white; }
+.stage-card.ai { background: white; border: 0.3mm solid var(--cyan); }
+.stage-card.output { background: var(--panel); color: white; }
+.stage-tag {
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11pt;
+ letter-spacing: 0.12em;
+ color: rgba(255,255,255,0.55);
+ font-weight: 600;
+ margin-bottom: 2mm;
+}
+.stage-card.ai .stage-tag { color: var(--cyan); }
+.stage-title {
+ font-size: 15pt;
+ font-weight: 800;
+ letter-spacing: -0.02em;
+ line-height: 1.15;
+ color: inherit;
+ margin-bottom: 2mm;
+}
+.stage-card.ai .stage-title { color: var(--panel); }
+.stage-sub {
+ font-size: 11pt;
+ color: rgba(255,255,255,0.65);
+ line-height: 1.5;
+}
+.stage-card.ai .stage-sub { color: var(--ink-soft); }
+.stage-arrow {
+ display: flex; align-items: center; justify-content: center;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 20pt;
+ font-weight: 800;
+ color: var(--cyan);
+}
+.meta-row {
+ display: flex; flex-wrap: wrap; gap: 1.5mm;
+ margin: 1.5mm 0 3mm;
+}
+.meta-pill {
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11pt;
+ background: var(--line-soft);
+ color: var(--ink);
+ padding: 0.8mm 2.5mm;
+ border-radius: 1mm;
+ font-weight: 600;
+}
+.hr2 {
+ height: 0.3mm;
+ background: var(--line);
+ margin: 3mm 0;
+}
+.branch2 {
+ display: flex; flex-direction: column; gap: 1.5mm;
+ margin-top: 1.5mm;
+}
+.b-row {
+ font-size: 11pt;
+ padding: 1.8mm 3mm;
+ border-radius: 1mm;
+ font-weight: 600;
+ line-height: 1.3;
+ border-left: 1.2mm solid;
+}
+.b-row.green { background: rgba(16,185,129,0.08); color: var(--ink); border-left-color: var(--green); }
+.b-row.amber { background: rgba(245,158,11,0.08); color: var(--ink); border-left-color: var(--amber); }
+.risk-bar {
+ display: flex;
+ height: 7mm;
+ border-radius: 1mm;
+ overflow: hidden;
+ margin-top: 1.5mm;
+}
+.r-seg {
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11pt;
+ color: white;
+ display: flex; align-items: center; justify-content: center;
+ font-weight: 700;
+ letter-spacing: 0.04em;
+}
+.r-seg.green { background: var(--green); }
+.r-seg.amber { background: var(--amber); }
+.r-seg.red { background: var(--red); }
+.branch-out {
+ display: flex; flex-direction: column; gap: 2mm;
+}
+.opt-row {
+ background: rgba(255,255,255,0.06);
+ border-left: 1.2mm solid;
+ padding: 2.5mm 4mm;
+ border-radius: 1mm;
+ font-size: 11pt;
+ line-height: 1.4;
+ color: white;
+}
+.opt-row.green { border-left-color: var(--green); }
+.opt-row.red { border-left-color: var(--red); }
+.opt-row strong { color: white; font-weight: 700; font-size: 12pt; }
+.opt-row .dim { color: rgba(255,255,255,0.55); font-size: 11pt; }
 </style>
 </head>
 <body>
 
 <!-- =================== 1. COVER =================== -->
 <section class="slide cover-slide cover">
-  <div class="cover-bg"></div>
-  <div class="cover-content">
-    <div class="badges">
-      <div class="badge">PROPOSAL · 2026</div>
-      <div class="badge dim">제8회 교육 공공데이터 AI활용대회</div>
-      <div class="badge dim">일반 / AI 활용 아이디어 기획</div>
-    </div>
-    <div style="margin-bottom:6mm;">
-    <svg class="ic xl cyan" style="width:48px;height:48px;stroke-width:1.5;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-  </div>
-  <h1>SCHOOL <span class="accent">COMPLAINT</span><br>AI <span class="accent">GATEWAY</span></h1>
-    <div class="lead">학교 민원 AI 게이트웨이 — 학부모 도우미 + 교권 보호</div>
-    <div class="keywords">
-      <span>FAQ RETRIEVAL</span><span>·</span>
-      <span>CLAUDE HAIKU LLM</span><span>·</span>
-      <span>RISK CLASSIFIER</span><span>·</span>
-      <span>SELF-IMPROVEMENT LOOP</span>
-    </div>
-    <div class="url-block">▸ LIVE  https://kw-ai-gateway.streamlit.app</div>
-  </div>
-  <div class="meta-row">
-    <span>SUBMISSION · 제출용</span>
-    <span>2026.05 · v2</span>
-  </div>
+ <div class="cover-bg"></div>
+ <div class="cover-content">
+ <div class="badges">
+ <div class="badge">PROPOSAL · 2026</div>
+ <div class="badge dim">제8회 교육 공공데이터 AI활용대회</div>
+ <div class="badge dim">일반 / AI 활용 아이디어 기획</div>
+ </div>
+ <div style="margin-bottom:6mm;">
+ <svg class="ic xl cyan" style="width:48px;height:48px;stroke-width:1.5;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+ </div>
+ <h1>SCHOOL <span class="accent">COMPLAINT</span><br>AI <span class="accent">GATEWAY</span></h1>
+ <div class="lead">학교 민원 AI 게이트웨이 — 학부모 도우미 + 교권 보호</div>
+ <div class="keywords">
+ <span>FAQ RETRIEVAL</span><span>·</span>
+ <span>CLAUDE HAIKU LLM</span><span>·</span>
+ <span>RISK CLASSIFIER</span><span>·</span>
+ <span>SELF-IMPROVEMENT LOOP</span>
+ </div>
+ <div class="url-block">▸ LIVE https://kw-ai-gateway.streamlit.app</div>
+ </div>
+ <div class="meta-row">
+ <span>SUBMISSION · 제출용</span>
+ <span>2026.05 · v2</span>
+ </div>
 </section>
 
 <!-- =================== 2. DATA INVENTORY =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ DATA</div>
-    <div class="page-num">02<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">RULE REQUIREMENT — DATA SHEET</div>
-    <div class="title">활용 교육 공공데이터</div>
-    <div class="subtitle">5종 결합 · 모든 데이터 공공데이터 라이선스 (CC BY 등) 출처 명시</div>
-    <table class="data">
-      <thead>
-        <tr><th style="width:6%">#</th><th style="width:30%">DATASET</th><th style="width:30%">SOURCE / LICENSE</th><th style="width:34%">ROLE IN SYSTEM</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="num">01</td><td>교권보호위원회 개최 현황 (2020~2023)</td><td>교육부 / data.go.kr 15137983 <span class="tag">CC BY</span></td><td>교권 침해 시계열 · 학교급별·유형별 분석</td></tr>
-        <tr><td class="num">02</td><td>2024 교육활동 침해 실태조사</td><td>교육부 / korea.kr 156688735 <span class="tag">CC BY</span></td><td>2024 진본 데이터 · 정책 효과 자연실험</td></tr>
-        <tr><td class="num">03</td><td>NEIS 학교정보·학사일정·급식 <span class="tag cyan">REALTIME</span></td><td>한국교육학술정보원 / open.neis.go.kr</td><td>학부모용 학교 검색·실시간 정보</td></tr>
-        <tr><td class="num">04</td><td>NEIS 학원교습소정보 (138,259건)</td><td>한국교육학술정보원 / open.neis.go.kr</td><td>학교 인근 사교육 환경 변수 (보조)</td></tr>
-        <tr><td class="num">05</td><td>KOSIS 사교육비조사 (2009~2025)</td><td>통계청 / kosis.kr DT_1PE105</td><td>학습 부담 ↔ 민원 발생 가설 (보조)</td></tr>
-      </tbody>
-    </table>
-    <div style="margin-top:6mm;" class="metric-grid c4">
-      <div class="metric dark"><div class="m-label">REALTIME APIs</div><div class="m-value">3</div></div>
-      <div class="metric"><div class="m-label">STATIC FILES</div><div class="m-value">2</div></div>
-      <div class="metric"><div class="m-label">TIME SERIES YRS</div><div class="m-value">17</div></div>
-      <div class="metric"><div class="m-label">SCHOOLS COVERED</div><div class="m-value">12,000+</div></div>
-    </div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>02 · DATA INVENTORY</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ DATA</div>
+ <div class="page-num">02<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">RULE REQUIREMENT — DATA SHEET</div>
+ <div class="title">활용 교육 공공데이터</div>
+ <div class="subtitle">5종 결합 · 모든 데이터 공공데이터 라이선스 (CC BY 등) 출처 명시</div>
+ <table class="data">
+ <thead>
+ <tr><th style="width:6%">#</th><th style="width:30%">DATASET</th><th style="width:30%">SOURCE / LICENSE</th><th style="width:34%">ROLE IN SYSTEM</th></tr>
+ </thead>
+ <tbody>
+ <tr><td class="num">01</td><td>교권보호위원회 개최 현황 (2020~2023)</td><td>교육부 / data.go.kr 15137983 <span class="tag">CC BY</span></td><td>교권 침해 시계열 · 학교급별·유형별 분석</td></tr>
+ <tr><td class="num">02</td><td>2024 교육활동 침해 실태조사</td><td>교육부 / korea.kr 156688735 <span class="tag">CC BY</span></td><td>2024 진본 데이터 · 정책 효과 자연실험</td></tr>
+ <tr><td class="num">03</td><td>NEIS 학교정보·학사일정·급식 <span class="tag cyan">REALTIME</span></td><td>한국교육학술정보원 / open.neis.go.kr</td><td>학부모용 학교 검색·실시간 정보</td></tr>
+ <tr><td class="num">04</td><td>NEIS 학원교습소정보 (138,259건)</td><td>한국교육학술정보원 / open.neis.go.kr</td><td>학교 인근 사교육 환경 변수 (보조)</td></tr>
+ <tr><td class="num">05</td><td>KOSIS 사교육비조사 (2009~2025)</td><td>통계청 / kosis.kr DT_1PE105</td><td>학습 부담 ↔ 민원 발생 가설 (보조)</td></tr>
+ </tbody>
+ </table>
+ <div style="margin-top:6mm;" class="metric-grid c4">
+ <div class="metric dark"><div class="m-label">REALTIME APIs</div><div class="m-value">3</div></div>
+ <div class="metric"><div class="m-label">STATIC FILES</div><div class="m-value">2</div></div>
+ <div class="metric"><div class="m-label">TIME SERIES YRS</div><div class="m-value">17</div></div>
+ <div class="metric"><div class="m-label">SCHOOLS COVERED</div><div class="m-value">12,000+</div></div>
+ </div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>02 · DATA INVENTORY</span></div>
 </section>
 
 <!-- =================== 3. PROBLEM =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ PROBLEM</div>
-    <div class="page-num">03<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">PROBLEM STATEMENT</div>
-    <div class="title">왜 지금 — AI 게이트웨이</div>
-    <div class="subtitle">2023 교사 사망 사건 이후 교사들은 학부모 악성 민원에 무방비. 입수 단계 AI 필터링은 부재.</div>
-    <div class="two-col rl" style="gap:8mm; flex:1;">
-      <div>
-        <ul class="bullets">
-          <li><strong>2023.7</strong> 교사 사망 사건 — 학부모 악성 민원 사회 의제화</li>
-          <li><strong>2024.3</strong> 교권보호5법 시행 — 교사 보호 의무 강화</li>
-          <li><strong>2025</strong> 학교민원 응답시스템 추진 — 진행 중</li>
-          <li>그러나 <strong style="color:var(--red);">민원 입수 단계의 AI 필터링은 부재</strong></li>
-          <li>교사는 여전히 악성 민원에 직접 노출</li>
-          <li>학부모도 "답을 주는 도구" 부재</li>
-        </ul>
-      </div>
-      <div>
-        <div class="img-frame" style="height: 76mm;"><img src="../03_visual/kw_01_timeline.png" alt="교권보호위 시계열"></div>
-        <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 01 · 교권보호위원회 개최 건수 시계열 (출처: 교육부 data.go.kr 15137983, 2020~2024)</div>
-      </div>
-    </div>
-    <div class="callout red" style="margin-top:5mm;">2020년 1,197건 → 2023년 5,050건 (4.2배 증가) → 2024년 첫 감소 4,234건 — 정책 효과 자연실험</div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>03 · PROBLEM</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ PROBLEM</div>
+ <div class="page-num">03<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">PROBLEM STATEMENT</div>
+ <div class="title">왜 지금 — AI 게이트웨이</div>
+ <div class="subtitle">2023 교사 사망 사건 이후 교사들은 학부모 악성 민원에 무방비. 입수 단계 AI 필터링은 부재.</div>
+ <div class="two-col rl" style="gap:8mm; flex:1;">
+ <div>
+ <ul class="bullets">
+ <li><strong>2023.7</strong> 교사 사망 사건 — 학부모 악성 민원 사회 의제화</li>
+ <li><strong>2024.3</strong> 교권보호5법 시행 — 교사 보호 의무 강화</li>
+ <li><strong>2025</strong> 학교민원 응답시스템 추진 — 진행 중</li>
+ <li>그러나 <strong style="color:var(--red);">민원 입수 단계의 AI 필터링은 부재</strong></li>
+ <li>교사는 여전히 악성 민원에 직접 노출</li>
+ <li>학부모도 "답을 주는 도구" 부재</li>
+ </ul>
+ </div>
+ <div>
+ <div class="img-frame" style="height: 76mm;"><img src="../03_visual/kw_01_timeline.png" alt="교권보호위 시계열"></div>
+ <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 01 · 교권보호위원회 개최 건수 시계열 (출처: 교육부 data.go.kr 15137983, 2020~2024)</div>
+ </div>
+ </div>
+ <div class="callout red" style="margin-top:5mm;">2020년 1,197건 → 2023년 5,050건 (4.2배 증가) → 2024년 첫 감소 4,234건 — 정책 효과 자연실험</div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>03 · PROBLEM</span></div>
 </section>
 
 <!-- =================== 4. ARCHITECTURE =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ ARCHITECTURE</div>
-    <div class="page-num">04<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">SOLUTION OVERVIEW</div>
-    <div class="title">7-STEP AI 게이트웨이</div>
-    <div class="subtitle">학부모 만족 (FAQ 즉시 답변) + 교권 보호 (악성 사전 점검)</div>
-    <div class="flow" style="margin-bottom:6mm;">
-      <div class="node input"><div class="step">PARENT</div><div class="label">질문 입력</div></div>
-      <div class="node ai"><div class="step">STEP 1</div><div class="label">학교 데이터<br>FAQ 검색</div></div>
-      <div class="node ai"><div class="step">STEP 2</div><div class="label">강매칭→답변<br>약매칭→LLM</div></div>
-      <div class="node warn"><div class="step">STEP 3</div><div class="label">교권 침해<br>사전 점검</div></div>
-      <div class="node input"><div class="step">STEP 4</div><div class="label">학부모<br>결정</div></div>
-      <div class="node warn"><div class="step">STEP 5</div><div class="label">학교용<br>분석 리포트</div></div>
-      <div class="node input"><div class="step">SCHOOL</div><div class="label">차분한<br>대응</div></div>
-    </div>
-    <div class="metric-grid c3">
-      <div class="card accent">
-        <h3>USER · PARENT</h3>
-        <p>학교 운영 안내·매뉴얼 즉시 답변<br>충동 민원 자가 점검</p>
-      </div>
-      <div class="card red">
-        <h3>USER · TEACHER</h3>
-        <p>악성 민원 직접 노출 ↓<br>분석 리포트와 함께 도달</p>
-      </div>
-      <div class="card dark">
-        <h3>USER · EDU AUTHORITY</h3>
-        <p>시도별 추이·정책 효과<br>예산 배분 의사결정</p>
-      </div>
-    </div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>04 · ARCHITECTURE</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ ARCHITECTURE</div>
+ <div class="page-num">04<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">SOLUTION ARCHITECTURE</div>
+ <div class="title">3-Stage AI 데이터 파이프라인</div>
+ <div class="subtitle">의미 검색 → 자연어 답변 → 위험 평가 → 분기 결정 · 1회 호출로 답변+분류 동시 출력</div>
+
+ <div class="pipeline2">
+ <!-- INPUT -->
+ <div class="stage-card input">
+ <div class="stage-tag">▸ INPUT</div>
+ <div class="stage-title">학부모</div>
+ <div class="stage-sub">질문·요청·민원<br>자유 입력</div>
+ <div style="margin-top:auto; font-family:'JetBrains Mono',monospace; font-size:11pt; color:rgba(255,255,255,0.35);">+ 학교 검색 (NEIS)</div>
+ </div>
+
+ <div class="stage-arrow">▶</div>
+
+ <!-- AI PROCESSING -->
+ <div class="stage-card ai">
+ <div class="stage-tag">▸ AI · 01 RETRIEVAL</div>
+ <div class="stage-title">학교 데이터 통합 검색</div>
+ <div class="meta-row">
+ <span class="meta-pill">FAQ 40</span>
+ <span class="meta-pill">공지 15</span>
+ <span class="meta-pill">통신문 6</span>
+ <span class="meta-pill">매뉴얼 5</span>
+ </div>
+ <div class="hr2"></div>
+ <div class="stage-tag">▸ AI · 02 ANSWER</div>
+ <div class="branch2">
+ <div class="b-row green">강매칭 (관련도 ≥ 0.30) → FAQ 답변 그대로 ($0)</div>
+ <div class="b-row amber">약매칭/무매칭 → Claude Haiku 자연어 답변 ($0.011)</div>
+ </div>
+ <div class="hr2"></div>
+ <div class="stage-tag">▸ AI · 03 RISK SCORE</div>
+ <div class="risk-bar">
+ <div class="r-seg green" style="flex:1;">정당 0.00-0.45</div>
+ <div class="r-seg amber" style="flex:1;">주의 0.45-0.65</div>
+ <div class="r-seg red" style="flex:1;">악성 0.65-1.00</div>
+ </div>
+ </div>
+
+ <div class="stage-arrow">▶</div>
+
+ <!-- DECIDE & OUTPUT -->
+ <div class="stage-card output">
+ <div class="stage-tag">▸ DECIDE & OUTPUT</div>
+ <div class="branch-out" style="margin-top:2mm;">
+ <div class="opt-row green">
+ <strong>자체 종료</strong><br>
+ <span class="dim">학부모 만족 + 학교 연락 X<br>교사 부담 0</span>
+ </div>
+ <div class="opt-row red">
+ <strong>학교 전달 + 리포트</strong><br>
+ <span class="dim">위험도 · 유사 사례 · 권장 절차<br>마크다운 자동 생성</span>
+ </div>
+ </div>
+ <div style="margin-top:auto; font-family:'JetBrains Mono',monospace; font-size:11pt; color:var(--cyan); padding-top:2mm;">→ 학교: 차분한 대응</div>
+ </div>
+ </div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>04 · ARCHITECTURE</span></div>
 </section>
 
 <!-- =================== 5. AI MODEL 1 — RETRIEVAL =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ AI / RETRIEVAL</div>
-    <div class="page-num">05<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">AI MODEL 01 · RETRIEVAL</div>
-    <div class="title">학교 데이터 통합 검색</div>
-    <div class="subtitle">TF-IDF (char n-gram 2~4) + cosine similarity · 66 docs indexed</div>
-    <div class="metric-grid c4">
-      <div class="metric"><div class="m-label">SCHOOL FAQ</div><div class="m-value">40</div></div>
-      <div class="metric"><div class="m-label">NOTICES</div><div class="m-value">15</div></div>
-      <div class="metric"><div class="m-label">LETTERS</div><div class="m-value">06</div></div>
-      <div class="metric"><div class="m-label">MANUALS</div><div class="m-value">05</div></div>
-    </div>
-    <div style="margin-top:6mm;" class="two-col">
-      <div>
-        <h4 class="section">SOURCE LABELING</h4>
-        <ul class="bullets tight">
-          <li><span class="dot cyan"></span> 📖 FAQ — 학교 운영 매뉴얼·법령 기반</li>
-          <li><span class="dot cyan"></span> 📢 공지 — 학사일정·행사·정책 안내</li>
-          <li><span class="dot cyan"></span> 📨 가정통신문 — 정기 발송 문서</li>
-          <li><span class="dot cyan"></span> 📋 매뉴얼 — 학교 운영 절차</li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="section">RETRIEVAL LOGIC</h4>
-        <ul class="bullets tight">
-          <li>강매칭 (관련도 ≥ 0.30) → FAQ 그대로 표시 ($0)</li>
-          <li>약/무매칭 → AI Model 02 (LLM) 호출</li>
-          <li>+ NEIS Open API 실시간 호출 (학사일정·급식)</li>
-          <li>학교 단위 맞춤 — 사이드바 학교 검색</li>
-        </ul>
-      </div>
-    </div>
-    <div class="callout cyan" style="margin-top:5mm;">정식 도입 시: 시도교육청 공지·학교 사이트 RAG 자동 인덱싱 (전국 1.2만 학교)</div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>05 · RETRIEVAL</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ AI / RETRIEVAL</div>
+ <div class="page-num">05<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">AI MODEL 01 · RETRIEVAL</div>
+ <div class="title">학교 데이터 통합 검색</div>
+ <div class="subtitle">TF-IDF (char n-gram 2~4) + cosine similarity · 66 docs indexed</div>
+ <div class="metric-grid c4">
+ <div class="metric"><div class="m-label">SCHOOL FAQ</div><div class="m-value">40</div></div>
+ <div class="metric"><div class="m-label">NOTICES</div><div class="m-value">15</div></div>
+ <div class="metric"><div class="m-label">LETTERS</div><div class="m-value">06</div></div>
+ <div class="metric"><div class="m-label">MANUALS</div><div class="m-value">05</div></div>
+ </div>
+ <div style="margin-top:6mm;" class="two-col">
+ <div>
+ <h4 class="section">SOURCE LABELING</h4>
+ <ul class="bullets tight">
+ <li><span class="dot cyan"></span> FAQ — 학교 운영 매뉴얼·법령 기반</li>
+ <li><span class="dot cyan"></span> 공지 — 학사일정·행사·정책 안내</li>
+ <li><span class="dot cyan"></span> 가정통신문 — 정기 발송 문서</li>
+ <li><span class="dot cyan"></span> 매뉴얼 — 학교 운영 절차</li>
+ </ul>
+ </div>
+ <div>
+ <h4 class="section">RETRIEVAL LOGIC</h4>
+ <ul class="bullets tight">
+ <li>강매칭 (관련도 ≥ 0.30) → FAQ 그대로 표시 ($0)</li>
+ <li>약/무매칭 → AI Model 02 (LLM) 호출</li>
+ <li>+ NEIS Open API 실시간 호출 (학사일정·급식)</li>
+ <li>학교 단위 맞춤 — 사이드바 학교 검색</li>
+ </ul>
+ </div>
+ </div>
+ <div class="callout cyan" style="margin-top:5mm;">정식 도입 시: 시도교육청 공지·학교 사이트 RAG 자동 인덱싱 (전국 1.2만 학교)</div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>05 · RETRIEVAL</span></div>
 </section>
 
 <!-- =================== 6. AI MODEL 2 — LLM =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ AI / LLM</div>
-    <div class="page-num">06<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">AI MODEL 02 · LLM ANSWERING</div>
-    <div class="title">Claude Haiku 4.5 자연어 답변</div>
-    <div class="subtitle">FAQ 약·무매칭 시 LLM이 사례 컨텍스트 기반 자연어 답변</div>
-    <div class="metric-grid c4">
-      <div class="metric accent"><div class="m-label">MODEL</div><div class="m-value" style="font-size:14pt;">claude-haiku-4-5</div></div>
-      <div class="metric"><div class="m-label">CONTEXT</div><div class="m-value">200K</div><div class="m-delta">tokens</div></div>
-      <div class="metric"><div class="m-label">COST / CALL</div><div class="m-value">$0.007</div></div>
-      <div class="metric"><div class="m-label">RESPONSE</div><div class="m-value">~8s</div></div>
-    </div>
-    <div style="margin-top:6mm;" class="two-col">
-      <div>
-        <h4 class="section">INPUT / OUTPUT</h4>
-        <div class="code">def smart_answer(query):
-  <span class="c"># RAG: 60 사례 전체 컨텍스트</span>
-  ctx = load_complaint_samples()
-  resp = haiku.create(
-    system=SYSTEM_PROMPT,
-    messages=[ctx + query],
-    max_tokens=800
-  )
-  <span class="k">return</span> resp.json()
-  <span class="c"># {answer, category, risk_score, reasoning}</span></div>
-      </div>
-      <div>
-        <h4 class="section">SYSTEM PROMPT 원칙</h4>
-        <ul class="bullets tight">
-          <li><strong>교사 정당 교육활동 존중</strong> — 무리한 요구 정중 안내</li>
-          <li>비공식 표현 가이드 (기 죽인다 / 차갑다 / 차별 등)</li>
-          <li>3~5문장 간결 + 다음 행동 명확화</li>
-          <li>근거 법령·매뉴얼 한 줄 인용</li>
-          <li>모르면 정직하게 — 담임·행정실 안내</li>
-          <li>JSON 출력 강제 (answer + category + risk_score + reasoning)</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>06 · LLM</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ AI / LLM</div>
+ <div class="page-num">06<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">AI MODEL 02 · LLM ANSWERING</div>
+ <div class="title">Claude Haiku 4.5 자연어 답변</div>
+ <div class="subtitle">FAQ 약·무매칭 시 LLM이 사례 컨텍스트 기반 자연어 답변</div>
+ <div class="metric-grid c4">
+ <div class="metric accent"><div class="m-label">MODEL</div><div class="m-value" style="font-size:14pt;">claude-haiku-4-5</div></div>
+ <div class="metric"><div class="m-label">CONTEXT</div><div class="m-value">200K</div><div class="m-delta">tokens</div></div>
+ <div class="metric"><div class="m-label">COST / CALL</div><div class="m-value">$0.011</div></div>
+ <div class="metric"><div class="m-label">RESPONSE</div><div class="m-value">~8s</div></div>
+ </div>
+ <div style="margin-top:6mm;" class="two-col">
+ <div>
+ <h4 class="section">INPUT / OUTPUT</h4>
+ <div class="code">def smart_answer(query):
+ <span class="c"># RAG: 60 사례 전체 컨텍스트</span>
+ ctx = load_complaint_samples()
+ resp = haiku.create(
+ system=SYSTEM_PROMPT,
+ messages=[ctx + query],
+ max_tokens=800
+ )
+ <span class="k">return</span> resp.json()
+ <span class="c"># {answer, category, risk_score, reasoning}</span></div>
+ </div>
+ <div>
+ <h4 class="section">SYSTEM PROMPT 원칙</h4>
+ <ul class="bullets tight">
+ <li><strong>교사 정당 교육활동 존중</strong> — 무리한 요구 정중 안내</li>
+ <li>비공식 표현 가이드 (기 죽인다 / 차갑다 / 차별 등)</li>
+ <li>3~5문장 간결 + 다음 행동 명확화</li>
+ <li>근거 법령·매뉴얼 한 줄 인용</li>
+ <li>모르면 정직하게 — 담임·행정실 안내</li>
+ <li>JSON 출력 강제 (answer + category + risk_score + reasoning)</li>
+ </ul>
+ </div>
+ </div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>06 · LLM</span></div>
 </section>
 
 <!-- =================== 7. AI MODEL 3 — CLASSIFIER =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ AI / CLASSIFIER</div>
-    <div class="page-num">07<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">AI MODEL 03 · RISK CLASSIFICATION</div>
-    <div class="title">RAG Full-Context 분류기</div>
-    <div class="subtitle">60건 라벨링 사례 → Claude Haiku 200K context · 답변과 분류 1회 호출 동시 출력</div>
-    <div class="two-col" style="margin-top:2mm;">
-      <div>
-        <h4 class="section">CATEGORIES — 13 종</h4>
-        <table class="data" style="margin-top:1mm;">
-          <thead><tr><th>주체</th><th>분류</th><th>예시</th></tr></thead>
-          <tbody>
-            <tr><td><span class="tag green">정당</span></td><td>안전·학사·건강·시설·정보</td><td>통학로 신호등 신고</td></tr>
-            <tr><td><span class="tag">모호</span></td><td>대화 권장 / 정보 부족</td><td>"우리 아이만 차별"</td></tr>
-            <tr><td><span class="tag red">악성</span></td><td>교권침해 / 업무부담 / 반복 / 사적영역 / 평가</td><td>"기 죽인다" / "사진 매끼"</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <h4 class="section">RISK SCORING — 0.0~1.0</h4>
-        <ul class="bullets tight">
-          <li><span class="dot green"></span> <strong>0.00 ~ 0.45</strong> 정당</li>
-          <li><span class="dot amber"></span> <strong>0.45 ~ 0.65</strong> 주의 (표현·내용 검토)</li>
-          <li><span class="dot red"></span> <strong>0.65 ~ 1.00</strong> 악성 위험 (자가 점검 강력 권장)</li>
-        </ul>
-        <h4 class="section" style="margin-top:5mm;">SAMPLE OUTPUT</h4>
-        <div class="code"><span class="c">// "선생님이 우리 아이 기를 죽여요"</span>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ AI / CLASSIFIER</div>
+ <div class="page-num">07<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">AI MODEL 03 · RISK CLASSIFICATION</div>
+ <div class="title">RAG Full-Context 분류기</div>
+ <div class="subtitle">60건 라벨링 사례 → Claude Haiku 200K context · 답변과 분류 1회 호출 동시 출력</div>
+ <div class="two-col" style="margin-top:2mm;">
+ <div>
+ <h4 class="section">CATEGORIES — 13 종</h4>
+ <table class="data" style="margin-top:1mm;">
+ <thead><tr><th>주체</th><th>분류</th><th>예시</th></tr></thead>
+ <tbody>
+ <tr><td><span class="tag green">정당</span></td><td>안전·학사·건강·시설·정보</td><td>통학로 신호등 신고</td></tr>
+ <tr><td><span class="tag">모호</span></td><td>대화 권장 / 정보 부족</td><td>"우리 아이만 차별"</td></tr>
+ <tr><td><span class="tag red">악성</span></td><td>교권침해 / 업무부담 / 반복 / 사적영역 / 평가</td><td>"기 죽인다" / "사진 매끼"</td></tr>
+ </tbody>
+ </table>
+ </div>
+ <div>
+ <h4 class="section">RISK SCORING — 0.0~1.0</h4>
+ <ul class="bullets tight">
+ <li><span class="dot green"></span> <strong>0.00 ~ 0.45</strong> 정당</li>
+ <li><span class="dot amber"></span> <strong>0.45 ~ 0.65</strong> 주의 (표현·내용 검토)</li>
+ <li><span class="dot red"></span> <strong>0.65 ~ 1.00</strong> 악성 위험 (자가 점검 강력 권장)</li>
+ </ul>
+ <h4 class="section" style="margin-top:5mm;">SAMPLE OUTPUT</h4>
+ <div class="code"><span class="c">// "선생님이 우리 아이 기를 죽여요"</span>
 {
-  <span class="s">"category"</span>: <span class="s">"악성 위험 (부당 간섭)"</span>,
-  <span class="s">"risk_score"</span>: <span class="k">0.65</span>,
-  <span class="s">"reasoning"</span>: <span class="s">"보호자 가해</span>
-   <span class="s">1위 패턴 (24.4%)"</span>
+ <span class="s">"category"</span>: <span class="s">"악성 위험 (부당 간섭)"</span>,
+ <span class="s">"risk_score"</span>: <span class="k">0.65</span>,
+ <span class="s">"reasoning"</span>: <span class="s">"보호자 가해</span>
+ <span class="s">1위 패턴 (24.4%)"</span>
 }</div>
-      </div>
-    </div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>07 · CLASSIFIER</span></div>
+ </div>
+ </div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>07 · CLASSIFIER</span></div>
 </section>
 
 <!-- =================== 8. VALIDATION =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ VALIDATION</div>
-    <div class="page-num">08<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">SELF-VALIDATION · 1005 QUESTIONS</div>
-    <div class="title">1,005건 자동 테스트 + AI 자가개선 루프</div>
-    <div class="subtitle">Claude가 학부모 질문 1,005개 자동 생성 → AI 분류 → 정확도 측정 → 시스템 프롬프트 자가개선</div>
-    <div class="metric-grid c5">
-      <div class="metric dark"><div class="m-label">QUESTIONS</div><div class="m-value">1,005</div></div>
-      <div class="metric"><div class="m-label">ACCURACY</div><div class="m-value">65.7%</div></div>
-      <div class="metric green"><div class="m-label">RECALL · 정당</div><div class="m-value">96.2%</div></div>
-      <div class="metric red"><div class="m-label">RECALL · 악성 (v0)</div><div class="m-value">19.6%</div><div class="m-delta up">→ v1: 48.9%</div></div>
-      <div class="metric accent"><div class="m-label">COST</div><div class="m-value">$15</div></div>
-    </div>
-    <div style="margin-top:6mm;" class="two-col">
-      <div>
-        <h4 class="section">SELF-IMPROVEMENT LOOP</h4>
-        <ul class="bullets tight">
-          <li>분류기가 자체 테스트 → 오분류 패턴 추출</li>
-          <li>Claude가 분석 결과 보고 프롬프트 자동 개선</li>
-          <li>새 프롬프트로 재테스트 → 정확도 비교</li>
-          <li>종료: +3%p 미만 또는 3회 또는 90%+ 달성</li>
-          <li><strong style="color:var(--green);">결과: 악성 recall +29.3%p 자가 보정 성공</strong></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="section">LIMITATIONS (정직 명시)</h4>
-        <ul class="bullets tight">
-          <li>악성 ↑ 시 모호 recall ↓ <strong>Trade-off 발견</strong></li>
-          <li>단순 프롬프트 변경의 한계</li>
-          <li>정식 도입 시 보강 필요:</li>
-          <li style="padding-left:14mm;">• 교권보호위 의결문 수천 건 fine-tuning</li>
-          <li style="padding-left:14mm;">• RLHF / 다목표 최적화</li>
-          <li style="padding-left:14mm;">• 휴먼 검증자 인터페이스</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>08 · VALIDATION</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ VALIDATION</div>
+ <div class="page-num">08<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">SELF-VALIDATION · 1005 QUESTIONS</div>
+ <div class="title">1,005건 자동 테스트 + AI 자가개선 루프</div>
+ <div class="subtitle">Claude가 학부모 질문 1,005개 자동 생성 → AI 분류 → 정확도 측정 → 시스템 프롬프트 자가개선</div>
+ <div class="metric-grid c5">
+ <div class="metric dark"><div class="m-label">QUESTIONS</div><div class="m-value">1,005</div></div>
+ <div class="metric"><div class="m-label">ACCURACY</div><div class="m-value">65.7%</div></div>
+ <div class="metric green"><div class="m-label">RECALL · 정당</div><div class="m-value">96.2%</div></div>
+ <div class="metric red"><div class="m-label">RECALL · 악성 (v0)</div><div class="m-value">19.6%</div><div class="m-delta up">→ v1: 48.9%</div></div>
+ <div class="metric accent"><div class="m-label">COST</div><div class="m-value">$15</div></div>
+ </div>
+ <div style="margin-top:6mm;" class="two-col">
+ <div>
+ <h4 class="section">SELF-IMPROVEMENT LOOP</h4>
+ <ul class="bullets tight">
+ <li>분류기가 자체 테스트 → 오분류 패턴 추출</li>
+ <li>Claude가 분석 결과 보고 프롬프트 자동 개선</li>
+ <li>새 프롬프트로 재테스트 → 정확도 비교</li>
+ <li>종료: +3%p 미만 또는 3회 또는 90%+ 달성</li>
+ <li><strong style="color:var(--green);">결과: 악성 recall +29.3%p 자가 보정 성공</strong></li>
+ </ul>
+ </div>
+ <div>
+ <h4 class="section">LIMITATIONS (정직 명시)</h4>
+ <ul class="bullets tight">
+ <li>악성 ↑ 시 모호 recall ↓ <strong>Trade-off 발견</strong></li>
+ <li>단순 프롬프트 변경의 한계</li>
+ <li>정식 도입 시 보강 필요:</li>
+ <li style="padding-left:14mm;">• 교권보호위 의결문 수천 건 fine-tuning</li>
+ <li style="padding-left:14mm;">• RLHF / 다목표 최적화</li>
+ <li style="padding-left:14mm;">• 휴먼 검증자 인터페이스</li>
+ </ul>
+ </div>
+ </div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>08 · VALIDATION</span></div>
 </section>
 
 <!-- =================== 9. NATURAL EXPERIMENT =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ EVIDENCE</div>
-    <div class="page-num">09<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">NATURAL EXPERIMENT · 2024 POLICY EFFECT</div>
-    <div class="title">진본 데이터 기반 정책 효과 측정</div>
-    <div class="subtitle">교권보호5법(2024.3) 시행 후 첫 감소 · 그러나 보호자 가해 비중은 급증 (7%대 → 10.9%)</div>
-    <div class="two-col" style="margin-top:2mm; flex:1;">
-      <div>
-        <div class="img-frame" style="height: 70mm;"><img src="../03_visual/kw_01_timeline.png" alt="시계열"></div>
-        <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 02 · 5년 시계열 + 2024 정책 효과 (출처: 교육부 2024 실태조사 korea.kr 156688735)</div>
-      </div>
-      <div>
-        <div class="img-frame" style="height: 70mm;"><img src="../03_visual/kw_02_parent_harm.png" alt="보호자 가해"></div>
-        <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 03 · 보호자 가해 비중 추이 — 2024년 10.9% 급증 (자체 분석)</div>
-      </div>
-    </div>
-    <div class="callout red" style="margin-top:4mm;">보호자 가해 비중 7%대 → 2024년 10.9% 급증 · 우리 시스템 도입 시급 · 1위 유형 "정당 교육활동 부당간섭" 24.4%</div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>09 · EVIDENCE</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ EVIDENCE</div>
+ <div class="page-num">09<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">NATURAL EXPERIMENT · 2024 POLICY EFFECT</div>
+ <div class="title">진본 데이터 기반 정책 효과 측정</div>
+ <div class="subtitle">교권보호5법(2024.3) 시행 후 첫 감소 · 그러나 보호자 가해 비중은 급증 (7%대 → 10.9%)</div>
+ <div class="two-col" style="margin-top:2mm; flex:1;">
+ <div>
+ <div class="img-frame" style="height: 70mm;"><img src="../03_visual/kw_01_timeline.png" alt="시계열"></div>
+ <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 02 · 5년 시계열 + 2024 정책 효과 (출처: 교육부 2024 실태조사 korea.kr 156688735)</div>
+ </div>
+ <div>
+ <div class="img-frame" style="height: 70mm;"><img src="../03_visual/kw_02_parent_harm.png" alt="보호자 가해"></div>
+ <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 03 · 보호자 가해 비중 추이 — 2024년 10.9% 급증 (자체 분석)</div>
+ </div>
+ </div>
+ <div class="callout red" style="margin-top:4mm;">보호자 가해 비중 7%대 → 2024년 10.9% 급증 · 우리 시스템 도입 시급 · 1위 유형 "정당 교육활동 부당간섭" 24.4%</div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>09 · EVIDENCE</span></div>
 </section>
 
 <!-- =================== 10. PROTOTYPE PARENT =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ PROTOTYPE / PARENT</div>
-    <div class="page-num">10<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">PROTOTYPE · PARENT MODE</div>
-    <div class="title">학부모 — AI 도우미</div>
-    <div class="subtitle">사이드바 학교 검색(NEIS) → 질문 입력 → FAQ + LLM 답변 + 교권 점검 + 결정</div>
-    <div class="two-col">
-      <div>
-        <ul class="bullets tight">
-          <li>🏫 학교 검색 (NEIS 실시간 12,000+ 학교)</li>
-          <li>STEP 1 — 학교 데이터 통합 검색 + Claude AI 답변</li>
-          <li>STEP 2 — 학사일정·급식 실시간 박스</li>
-          <li>STEP 3 — 🛡 교권 침해 사전 점검 (위험도·분류·긴급도)</li>
-          <li>STEP 4 — 4버튼: ✅해결됨 · 🔄다시 · ❌취소 · 📨제출</li>
-        </ul>
-      </div>
-      <div>
-        <div class="card dark">
-          <h3>OUTPUT LABELS</h3>
-          <p style="font-family: 'JetBrains Mono', monospace; font-size:11pt; line-height:2;">
-          <svg class="ic cyan" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> FAQ &nbsp;
-          <svg class="ic cyan" viewBox="0 0 24 24"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg> NOTICE &nbsp;
-          <svg class="ic cyan" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 5L2 7"/></svg> LETTER<br>
-          <svg class="ic cyan" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg> MANUAL &nbsp;
-          <svg class="ic cyan" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg> CLAUDE LLM
-          </p>
-        </div>
-        <div class="card green" style="margin-top:3mm;">
-          <h3><svg class="ic green" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> 자체 종료 시</h3>
-          <p>학교 연락 없이 해결 — 학부모 만족 + 교사 부담 감소 · 교권 침해 사전 차단</p>
-        </div>
-      </div>
-    </div>
-    <div class="code" style="margin-top:5mm;">▸ LIVE  https://kw-ai-gateway.streamlit.app  ·  사이드바 학교 검색 → 학부모 모드 선택</div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>10 · PARENT</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ PROTOTYPE / PARENT</div>
+ <div class="page-num">10<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">PROTOTYPE · PARENT MODE</div>
+ <div class="title">학부모 — AI 도우미</div>
+ <div class="subtitle">사이드바 학교 검색(NEIS) → 질문 입력 → FAQ + LLM 답변 + 교권 점검 + 결정</div>
+ <div class="two-col">
+ <div>
+ <ul class="bullets tight">
+ <li> 학교 검색 (NEIS 실시간 12,000+ 학교)</li>
+ <li>STEP 1 — 학교 데이터 통합 검색 + Claude AI 답변</li>
+ <li>STEP 2 — 학사일정·급식 실시간 박스</li>
+ <li>STEP 3 — 교권 침해 사전 점검 (위험도·분류·긴급도)</li>
+ <li>STEP 4 — 4버튼: 해결됨 · 다시 · 취소 · 제출</li>
+ </ul>
+ </div>
+ <div>
+ <div class="card dark">
+ <h3>OUTPUT LABELS</h3>
+ <p style="font-family: 'JetBrains Mono', monospace; font-size:11pt; line-height:2;">
+ <svg class="ic cyan" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> FAQ &nbsp;
+ <svg class="ic cyan" viewBox="0 0 24 24"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg> NOTICE &nbsp;
+ <svg class="ic cyan" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 5L2 7"/></svg> LETTER<br>
+ <svg class="ic cyan" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg> MANUAL &nbsp;
+ <svg class="ic cyan" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg> CLAUDE LLM
+ </p>
+ </div>
+ <div class="card green" style="margin-top:3mm;">
+ <h3><svg class="ic green" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> 자체 종료 시</h3>
+ <p>학교 연락 없이 해결 — 학부모 만족 + 교사 부담 감소 · 교권 침해 사전 차단</p>
+ </div>
+ </div>
+ </div>
+ <div class="code" style="margin-top:5mm;">▸ LIVE https://kw-ai-gateway.streamlit.app · 사이드바 학교 검색 → 학부모 모드 선택</div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>10 · PARENT</span></div>
 </section>
 
 <!-- =================== 11. PROTOTYPE SCHOOL =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ PROTOTYPE / SCHOOL</div>
-    <div class="page-num">11<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">PROTOTYPE · SCHOOL MODE</div>
-    <div class="title">학교 — AI 분석 리포트</div>
-    <div class="subtitle">교사·교감·교장 사용 · 접수 민원 + AI 분석 리포트 마크다운</div>
-    <table class="data">
-      <thead>
-        <tr><th>RISK</th><th>임계</th><th>권장 학교 대응 절차</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="tag red">🚫 악성</span></td>
-          <td class="num">≥ 0.65</td>
-          <td>학교장·교감 우선 검토 · 교권보호위 회부 사전 협의 · 교사 단독 응대 금지, 복수 입회 · 응대 기록·녹취 (사전 고지)</td>
-        </tr>
-        <tr>
-          <td><span class="tag">주의</span></td>
-          <td class="num">≥ 0.45</td>
-          <td>1차 담임 + 보호자 면담 (학교 내 공식 공간) · 면담 기록 보존 · 필요 시 상담교사 동석</td>
-        </tr>
-        <tr>
-          <td><span class="tag green">정당</span></td>
-          <td class="num">&lt; 0.45</td>
-          <td>관할 담당자(담임/보건/시설) 정상 처리 · 처리 결과 회신 · 유사 민원 누적 시 매뉴얼 업데이트</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="callout" style="margin-top:6mm;">📋 학교용 마크다운 리포트 자동 생성 — 분류 결과 + 민원 원문 + 유사 과거 사례 Top 3 + 권장 절차</div>
-    <ul class="bullets tight" style="margin-top:4mm;">
-      <li>교사 직접 응대 부담 ↓</li>
-      <li>학교장 사전 검토 가능 — 충동 대응 X</li>
-      <li>표준 대응 절차 자동 안내</li>
-    </ul>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>11 · SCHOOL</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ PROTOTYPE / SCHOOL</div>
+ <div class="page-num">11<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">PROTOTYPE · SCHOOL MODE</div>
+ <div class="title">학교 — AI 분석 리포트</div>
+ <div class="subtitle">교사·교감·교장 사용 · 접수 민원 + AI 분석 리포트 마크다운</div>
+ <table class="data">
+ <thead>
+ <tr><th>RISK</th><th>임계</th><th>권장 학교 대응 절차</th></tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td><span class="tag red"> 악성</span></td>
+ <td class="num">≥ 0.65</td>
+ <td>학교장·교감 우선 검토 · 교권보호위 회부 사전 협의 · 교사 단독 응대 금지, 복수 입회 · 응대 기록·녹취 (사전 고지)</td>
+ </tr>
+ <tr>
+ <td><span class="tag">주의</span></td>
+ <td class="num">≥ 0.45</td>
+ <td>1차 담임 + 보호자 면담 (학교 내 공식 공간) · 면담 기록 보존 · 필요 시 상담교사 동석</td>
+ </tr>
+ <tr>
+ <td><span class="tag green">정당</span></td>
+ <td class="num">&lt; 0.45</td>
+ <td>관할 담당자(담임/보건/시설) 정상 처리 · 처리 결과 회신 · 유사 민원 누적 시 매뉴얼 업데이트</td>
+ </tr>
+ </tbody>
+ </table>
+ <div class="callout" style="margin-top:6mm;"> 학교용 마크다운 리포트 자동 생성 — 분류 결과 + 민원 원문 + 유사 과거 사례 Top 3 + 권장 절차</div>
+ <ul class="bullets tight" style="margin-top:4mm;">
+ <li>교사 직접 응대 부담 ↓</li>
+ <li>학교장 사전 검토 가능 — 충동 대응 X</li>
+ <li>표준 대응 절차 자동 안내</li>
+ </ul>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>11 · SCHOOL</span></div>
 </section>
 
 <!-- =================== 12. PROTOTYPE EDU =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ PROTOTYPE / EDU</div>
-    <div class="page-num">12<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">PROTOTYPE · EDU AUTHORITY MODE</div>
-    <div class="title">교육청 — 교권 보호 현황</div>
-    <div class="subtitle">진본 데이터(2024 실태조사) 기반 시도별·학교급별 모니터링</div>
-    <div class="metric-grid c4" style="margin-bottom:5mm;">
-      <div class="metric dark"><div class="m-label">2024 심의 건수</div><div class="m-value">4,234</div><div class="m-delta down">-816 from 2023</div></div>
-      <div class="metric red"><div class="m-label">보호자 가해 %</div><div class="m-value">10.9%</div><div class="m-delta up">+3.9%p</div></div>
-      <div class="metric"><div class="m-label">유치원 보호자</div><div class="m-value">100%</div></div>
-      <div class="metric accent"><div class="m-label">시스템 타겟</div><div class="m-value">461/년</div></div>
-    </div>
-    <div class="two-col" style="flex:1;">
-      <div>
-        <div class="img-frame" style="height: 60mm;"><img src="../03_visual/kw_03_school_2024.png" alt="학교급 분포"></div>
-        <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 04 · 2024 학교급별 침해 주체 (출처: 교육부 실태조사)</div>
-      </div>
-      <div>
-        <div class="img-frame" style="height: 60mm;"><img src="../03_visual/kw_04_parent_types.png" alt="보호자 유형"></div>
-        <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 05 · 2023 보호자 가해 유형 분포 (자체 분석)</div>
-      </div>
-    </div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>12 · EDU AUTHORITY</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ PROTOTYPE / EDU</div>
+ <div class="page-num">12<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">PROTOTYPE · EDU AUTHORITY MODE</div>
+ <div class="title">교육청 — 교권 보호 현황</div>
+ <div class="subtitle">진본 데이터(2024 실태조사) 기반 시도별·학교급별 모니터링</div>
+ <div class="metric-grid c4" style="margin-bottom:5mm;">
+ <div class="metric dark"><div class="m-label">2024 심의 건수</div><div class="m-value">4,234</div><div class="m-delta down">-816 from 2023</div></div>
+ <div class="metric red"><div class="m-label">보호자 가해 %</div><div class="m-value">10.9%</div><div class="m-delta up">+3.9%p</div></div>
+ <div class="metric"><div class="m-label">유치원 보호자</div><div class="m-value">100%</div></div>
+ <div class="metric accent"><div class="m-label">시스템 타겟</div><div class="m-value">461/년</div></div>
+ </div>
+ <div class="two-col" style="flex:1;">
+ <div>
+ <div class="img-frame" style="height: 60mm;"><img src="../03_visual/kw_03_school_2024.png" alt="학교급 분포"></div>
+ <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 04 · 2024 학교급별 침해 주체 (출처: 교육부 실태조사)</div>
+ </div>
+ <div>
+ <div class="img-frame" style="height: 60mm;"><img src="../03_visual/kw_04_parent_types.png" alt="보호자 유형"></div>
+ <div class="legend" style="margin-top:2mm; text-align:center; font-size:11pt;">▸ FIG 05 · 2023 보호자 가해 유형 분포 (자체 분석)</div>
+ </div>
+ </div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>12 · EDU AUTHORITY</span></div>
 </section>
 
 <!-- =================== 13. SCENARIOS =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ DEMO</div>
-    <div class="page-num">13<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">DEMO SCENARIOS · 4 CASES</div>
-    <div class="title">실시연 — 4가지 균형 시나리오</div>
-    <div class="subtitle">악성 사전 차단 + 일상 정보 즉시 답변</div>
-    <div style="margin-top:2mm;">
-      <div class="scn green">
-        <div class="hd"><span class="dot green"></span> CASE 01 · 정당 · 일상 안전</div>
-        <div class="q">"통학로에 신호등이 없어 매일 위험합니다"</div>
-        <div class="a">→ FAQ 강매칭 → 학교운영위원회 안건 안내 · risk 0.00</div>
-      </div>
-      <div class="scn cyan">
-        <div class="hd"><span class="dot cyan"></span> CASE 02 · 공지 · 학교 자료 직접 매칭</div>
-        <div class="q">"운동회는 언제예요?"</div>
-        <div class="a">→ 📢 공지 N08 "운동회 일정 변경 안내" 표시 (5.22 연기)</div>
-      </div>
-      <div class="scn amber">
-        <div class="hd"><span class="dot amber"></span> CASE 03 · LLM · AI 자연어 답변</div>
-        <div class="q">"선생님 책상에 꽃 한 송이 놓아도 될까요?"</div>
-        <div class="a">→ 🤖 Claude Haiku 답변: 청탁금지법 안내 + 공식 채널 권장</div>
-      </div>
-      <div class="scn red">
-        <div class="hd"><span class="dot red"></span> CASE 04 · 악성 · 교권 침해 사전 차단</div>
-        <div class="q">"점심 식판 사진 매끼 찍어 보내주세요"</div>
-        <div class="a">→ 🛡 risk 0.86 · 🚫 악성 (업무 부담) · 자가 점검 강력 권장</div>
-      </div>
-    </div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>13 · DEMO</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ DEMO</div>
+ <div class="page-num">13<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">DEMO SCENARIOS · 4 CASES</div>
+ <div class="title">실시연 — 4가지 균형 시나리오</div>
+ <div class="subtitle">악성 사전 차단 + 일상 정보 즉시 답변</div>
+ <div style="margin-top:2mm;">
+ <div class="scn green">
+ <div class="hd"><span class="dot green"></span> CASE 01 · 정당 · 일상 안전</div>
+ <div class="q">"통학로에 신호등이 없어 매일 위험합니다"</div>
+ <div class="a">→ FAQ 강매칭 → 학교운영위원회 안건 안내 · risk 0.00</div>
+ </div>
+ <div class="scn cyan">
+ <div class="hd"><span class="dot cyan"></span> CASE 02 · 공지 · 학교 자료 직접 매칭</div>
+ <div class="q">"운동회는 언제예요?"</div>
+ <div class="a">→ 공지 N08 "운동회 일정 변경 안내" 표시 (5.22 연기)</div>
+ </div>
+ <div class="scn amber">
+ <div class="hd"><span class="dot amber"></span> CASE 03 · LLM · AI 자연어 답변</div>
+ <div class="q">"선생님 책상에 꽃 한 송이 놓아도 될까요?"</div>
+ <div class="a">→ Claude Haiku 답변: 청탁금지법 안내 + 공식 채널 권장</div>
+ </div>
+ <div class="scn red">
+ <div class="hd"><span class="dot red"></span> CASE 04 · 악성 · 교권 침해 사전 차단</div>
+ <div class="q">"점심 식판 사진 매끼 찍어 보내주세요"</div>
+ <div class="a">→ risk 0.75 · 악성 (업무 부담) · 자가 점검 강력 권장</div>
+ </div>
+ </div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>13 · DEMO</span></div>
 </section>
 
 <!-- =================== 14. IMPACT & LIMITS =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ IMPACT</div>
-    <div class="page-num">14<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">EXPECTED IMPACT &amp; HONEST LIMITS</div>
-    <div class="title">기대 효과 + 정직한 한계</div>
-    <div class="subtitle">한계 명시 = 신뢰성 ↑ · 정식 도입 로드맵 명확화</div>
-    <div class="two-col" style="margin-top:2mm; flex:1;">
-      <div>
-        <h4 class="section">EXPECTED IMPACT</h4>
-        <ul class="bullets tight">
-          <li><strong>학부모</strong> 정보 만족 + 학교 방문 부담 ↓</li>
-          <li><strong>교사</strong> 악성 민원 직접 노출 ↓ · 분석 리포트 도달</li>
-          <li><strong>학교장</strong> 리포트 사전 검토 · 표준 절차 자동 안내</li>
-          <li><strong>교육청</strong> 시도별 추이 · 정책 효과 측정</li>
-          <li><strong>범정부 통합본선</strong> 연계 가능</li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="section">LIMITS &amp; ROADMAP</h4>
-        <ul class="bullets tight">
-          <li><strong>학습 데이터</strong> 가상 60건 → 교권보호위 의결문 수천 건</li>
-          <li><strong>FAQ DB</strong> 시연 40건 → 시도교육청 표준 + 학교 사이트 RAG</li>
-          <li><strong>NEIS API</strong> 이미 실시간 — 정식 그대로</li>
-          <li><strong>분류기</strong> RAG → 한국어 LLM 미세조정 + RLHF</li>
-          <li><strong>위험도 임계</strong> 시범 운영 후 학교별 보정</li>
-          <li><strong>자가개선</strong> Trade-off 다목표 최적화 필요</li>
-        </ul>
-      </div>
-    </div>
-    <div class="callout" style="margin-top:5mm;">정직 명시 — 시도·성공·한계까지 투명 공개 (논리성·합리성 ↑)</div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>14 · IMPACT</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ IMPACT</div>
+ <div class="page-num">14<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">EXPECTED IMPACT &amp; HONEST LIMITS</div>
+ <div class="title">기대 효과 + 정직한 한계</div>
+ <div class="subtitle">한계 명시 = 신뢰성 ↑ · 정식 도입 로드맵 명확화</div>
+ <div class="two-col" style="margin-top:2mm; flex:1;">
+ <div>
+ <h4 class="section">EXPECTED IMPACT</h4>
+ <ul class="bullets tight">
+ <li><strong>학부모</strong> 정보 만족 + 학교 방문 부담 ↓</li>
+ <li><strong>교사</strong> 악성 민원 직접 노출 ↓ · 분석 리포트 도달</li>
+ <li><strong>학교장</strong> 리포트 사전 검토 · 표준 절차 자동 안내</li>
+ <li><strong>교육청</strong> 시도별 추이 · 정책 효과 측정</li>
+ <li><strong>범정부 통합본선</strong> 연계 가능</li>
+ </ul>
+ </div>
+ <div>
+ <h4 class="section">LIMITS &amp; ROADMAP</h4>
+ <ul class="bullets tight">
+ <li><strong>학습 데이터</strong> 가상 60건 → 교권보호위 의결문 수천 건</li>
+ <li><strong>FAQ DB</strong> 시연 40건 → 시도교육청 표준 + 학교 사이트 RAG</li>
+ <li><strong>NEIS API</strong> 이미 실시간 — 정식 그대로</li>
+ <li><strong>분류기</strong> RAG → 한국어 LLM 미세조정 + RLHF</li>
+ <li><strong>위험도 임계</strong> 시범 운영 후 학교별 보정</li>
+ <li><strong>자가개선</strong> Trade-off 다목표 최적화 필요</li>
+ </ul>
+ </div>
+ </div>
+ <div class="callout" style="margin-top:5mm;">정직 명시 — 시도·성공·한계까지 투명 공개 (논리성·합리성 ↑)</div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>14 · IMPACT</span></div>
 </section>
 
 <!-- =================== 15. SOURCES =================== -->
 <section class="slide">
-  <div class="hdr">
-    <div class="brand">SCHOOL · COMPLAINT · AI</div>
-    <div class="crumb">▸ SOURCES</div>
-    <div class="page-num">15<span>/15</span></div>
-  </div>
-  <div class="body">
-    <div class="eyebrow">CREDITS · SOURCES · LIVE</div>
-    <div class="title">감사합니다</div>
-    <div class="subtitle">데이터 출처 · AI 도구 · 라이브 데모</div>
-    <div class="two-col">
-      <div>
-        <h4 class="section">📊 EDUCATION OPEN DATA</h4>
-        <ul class="bullets tight">
-          <li>교육부 교권보호위원회 개최 현황 · data.go.kr 15137983 (CC BY)</li>
-          <li>교육부 2024 교육활동 침해 실태조사 · korea.kr 156688735 (CC BY)</li>
-          <li>NEIS 학교정보·학사일정·급식 · open.neis.go.kr Open API</li>
-          <li>NEIS 학원교습소정보 · open.neis.go.kr Open API</li>
-          <li>통계청 KOSIS 사교육비조사 · kosis.kr DT_1PE105</li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="section">🤖 AI &amp; TECH STACK</h4>
-        <ul class="bullets tight">
-          <li><strong>Claude Haiku 4.5</strong> (Anthropic) — 자연어 답변 생성 · 자가개선</li>
-          <li><strong>scikit-learn</strong> — TF-IDF, cosine similarity, FAQ retrieval</li>
-          <li><strong>statsmodels</strong> — Holt-Winters 시계열</li>
-          <li><strong>Streamlit + Plotly</strong> — 인터랙티브 프로토타입</li>
-          <li><strong>Pretendard</strong> (OFL) · <strong>Inter</strong> · <strong>JetBrains Mono</strong> 폰트</li>
-        </ul>
-      </div>
-    </div>
-    <div style="margin-top:6mm;" class="callout cyan">
-      🌐 LIVE DEMO &nbsp;·&nbsp; https://kw-ai-gateway.streamlit.app
-    </div>
-    <div style="margin-top:3mm;" class="legend" style="font-size:11pt;">📦 SOURCE CODE · github.com/[출품팀]/kw-ai-gateway · 공개 검증용</div>
-    <div style="margin-top:5mm;" class="card">
-      <h3 style="margin-bottom:2mm;">📎 별첨 자료 (룰 "부록은 매수 산정 제외" 활용 · AI 활용 과정 상세)</h3>
-      <ul class="bullets tight" style="font-size:11pt;">
-        <li><strong>test_report_1000.md</strong> — 1,005건 자체 검증 보고서 (정확도·혼동행렬·오분류 분석)</li>
-        <li><strong>self_improve_log.md</strong> — AI 자가개선 루프 로그 (Iteration 1~2 정확도·prompt 변화)</li>
-        <li><strong>prompts/system_v0.txt, v1.txt</strong> — AI 분류기 시스템 프롬프트 전문 (초기·자가개선 후)</li>
-        <li><strong>requirements.txt</strong> — 재현 가능한 패키지 명세 (streamlit·sklearn·anthropic 등)</li>
-      </ul>
-    </div>
-  </div>
-  <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>15 · END</span></div>
+ <div class="hdr">
+ <div class="brand">SCHOOL · COMPLAINT · AI</div>
+ <div class="crumb">▸ SOURCES</div>
+ <div class="page-num">15<span>/15</span></div>
+ </div>
+ <div class="body">
+ <div class="eyebrow">CREDITS · SOURCES · LIVE</div>
+ <div class="title">감사합니다</div>
+ <div class="subtitle">데이터 출처 · AI 도구 · 라이브 데모</div>
+ <div class="two-col">
+ <div>
+ <h4 class="section"> EDUCATION OPEN DATA</h4>
+ <ul class="bullets tight">
+ <li>교육부 교권보호위원회 개최 현황 · data.go.kr 15137983 (CC BY)</li>
+ <li>교육부 2024 교육활동 침해 실태조사 · korea.kr 156688735 (CC BY)</li>
+ <li>NEIS 학교정보·학사일정·급식 · open.neis.go.kr Open API</li>
+ <li>NEIS 학원교습소정보 · open.neis.go.kr Open API</li>
+ <li>통계청 KOSIS 사교육비조사 · kosis.kr DT_1PE105</li>
+ </ul>
+ </div>
+ <div>
+ <h4 class="section"> AI &amp; TECH STACK</h4>
+ <ul class="bullets tight">
+ <li><strong>Claude Haiku 4.5</strong> (Anthropic) — 자연어 답변 생성 · 자가개선</li>
+ <li><strong>scikit-learn</strong> — TF-IDF, cosine similarity, FAQ retrieval</li>
+ <li><strong>statsmodels</strong> — Holt-Winters 시계열</li>
+ <li><strong>Streamlit + Plotly</strong> — 인터랙티브 프로토타입</li>
+ <li><strong>Pretendard</strong> (OFL) · <strong>Inter</strong> · <strong>JetBrains Mono</strong> 폰트</li>
+ </ul>
+ </div>
+ </div>
+ <div style="margin-top:6mm;" class="callout cyan">
+ LIVE DEMO &nbsp;·&nbsp; https://kw-ai-gateway.streamlit.app
+ </div>
+ <div style="margin-top:3mm;" class="legend" style="font-size:11pt;"> SOURCE CODE · github.com/[출품팀]/kw-ai-gateway · 공개 검증용</div>
+ <div style="margin-top:5mm;" class="card">
+ <h3 style="margin-bottom:2mm;"> 별첨 자료 (룰 "부록은 매수 산정 제외" 활용 · AI 활용 과정 상세)</h3>
+ <ul class="bullets tight" style="font-size:11pt;">
+ <li><strong>test_report_1000.md</strong> — 1,005건 자체 검증 보고서 (정확도·혼동행렬·오분류 분석)</li>
+ <li><strong>self_improve_log.md</strong> — AI 자가개선 루프 로그 (Iteration 1~2 정확도·prompt 변화)</li>
+ <li><strong>prompts/system_v0.txt, v1.txt</strong> — AI 분류기 시스템 프롬프트 전문 (초기·자가개선 후)</li>
+ <li><strong>requirements.txt</strong> — 재현 가능한 패키지 명세 (streamlit·sklearn·anthropic 등)</li>
+ </ul>
+ </div>
+ </div>
+ <div class="ftr"><span>kw-ai-gateway.streamlit.app</span><span>15 · END</span></div>
 </section>
 
 </body>

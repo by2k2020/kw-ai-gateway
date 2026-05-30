@@ -182,7 +182,17 @@ if mode.startswith("👨"):
                         st.caption(f"조회 실패: {ex}")
             st.markdown("---")
 
-        # ===== STEP 1: 답변 (FAQ 또는 LLM) =====
+        # ===== STEP 1: 답변 (RAG full-context LLM) =====
+        smart = {
+            "mode": "llm" if rag_res.get("answer") else "faq",
+            "faqs": faqs,
+            "llm": {
+                "answer": rag_res.get("answer", ""),
+                "model": "claude-haiku-4-5-20251001",
+                "input_tokens": rag_res.get("in_tokens", 0),
+                "output_tokens": rag_res.get("out_tokens", 0),
+            },
+        }
         mode = smart.get("mode", "faq")
         faqs = smart.get("faqs", [])
         llm_res = smart.get("llm")
