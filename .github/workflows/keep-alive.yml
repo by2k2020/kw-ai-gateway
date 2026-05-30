@@ -1,0 +1,29 @@
+name: Keep Streamlit Cloud Alive
+
+on:
+  schedule:
+    # 매 30분마다 ping (Streamlit Cloud 무료 슬립 방지)
+    - cron: "*/30 * * * *"
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit app
+        run: |
+          URL="https://kw-ai-gateway.streamlit.app/"
+          echo "▸ pinging $URL"
+          # -L: 리다이렉트 따라가기, -m 30: 30초 타임아웃
+          STATUS=$(curl -s -L -m 30 -o /tmp/response.html -w "%{http_code}" "$URL")
+          SIZE=$(wc -c < /tmp/response.html)
+          echo "▸ HTTP $STATUS, size $SIZE bytes"
+
+          # Zzzz 슬립 페이지면 한 번 더 시도 (깨우기)
+          if grep -q "Zzzz" /tmp/response.html 2>/dev/null; then
+            echo "▸ app was asleep, waking up..."
+            sleep 30
+            curl -s -L -m 60 "$URL" -o /tmp/response2.html
+            echo "▸ wake-up retry size: $(wc -c < /tmp/response2.html)"
+          fi
+          echo "✅ ping done"
