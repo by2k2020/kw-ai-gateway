@@ -61,44 +61,88 @@ st.set_page_config(page_title="학교 민원 AI 게이트웨이",
 if "inbox" not in st.session_state:
     st.session_state.inbox = []
 
-# ===== Palantir-style 다크/시안 CSS 주입 =====
+# ===== Palantir-style (라이트 본문 + 다크 사이드바) =====
 st.markdown("""<style>
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
-.stApp { background: #0B1320; }
-section[data-testid='stSidebar'] {
-    background: #14264A !important;
-    border-right: 1px solid #00B4D8;
-}
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;600;800&display=swap');
+
+/* 본문 — 라이트 */
+.stApp { background: #FFFFFF; }
+.main, .main * { color: #0B1320; }
+.main h1 { color: #0B1320 !important; font-family: 'Inter', sans-serif; font-weight: 800; letter-spacing: -0.03em; }
+.main h2, .main h3 { color: #0B1320 !important; font-family: 'Inter', sans-serif; font-weight: 700; }
+.main h2 { border-left: 4px solid #00B4D8; padding-left: 12px; }
+.main p, .main li, .main label { color: #2D3748 !important; }
+.main .stMarkdown strong { color: #0B1320 !important; }
+
+/* 헤더 영역 (Deploy/메뉴 가림용) */
+header[data-testid='stHeader'] { background: #FFFFFF !important; border-bottom: 1px solid #E5E7EB; }
+
+/* 사이드바 — 다크 네이비 */
+section[data-testid='stSidebar'] { background: #0B1320 !important; border-right: 2px solid #00B4D8; }
 section[data-testid='stSidebar'] * { color: rgba(255,255,255,0.85) !important; }
-section[data-testid='stSidebar'] h1, section[data-testid='stSidebar'] h2,
-section[data-testid='stSidebar'] h3 { color: #00B4D8 !important; font-family: 'JetBrains Mono', monospace !important; letter-spacing: 0.06em; font-weight: 700 !important; }
-section[data-testid='stSidebar'] input, section[data-testid='stSidebar'] select {
-    background: #0B1320 !important; color: white !important; border: 1px solid #00B4D8 !important;
-}
-.main h1, .main h2, .main h3 { color: #E2E8F0 !important; font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
-.main p, .main li, .main label, .main span, .main div { color: #CBD5E0 !important; }
-.main .stMarkdown strong { color: #00B4D8 !important; }
-button[kind='primary'], button[data-testid='baseButton-primary'] {
-    background: #00B4D8 !important; color: #0B1320 !important; border: none !important;
-    font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: 0.05em;
-}
-button[kind='secondary'] { background: #14264A !important; color: white !important; border: 1px solid #00B4D8 !important; }
-textarea, input[type='text'] {
+section[data-testid='stSidebar'] h1 { color: #00B4D8 !important; font-family: 'JetBrains Mono', monospace !important; letter-spacing: 0.08em; font-size: 16px !important; font-weight: 700 !important; }
+section[data-testid='stSidebar'] h2, section[data-testid='stSidebar'] h3 { color: #00B4D8 !important; font-family: 'JetBrains Mono', monospace !important; letter-spacing: 0.08em; font-size: 12px !important; font-weight: 700 !important; }
+section[data-testid='stSidebar'] [data-testid='stRadio'] label p { color: rgba(255,255,255,0.85) !important; font-family: 'Inter', sans-serif !important; font-size: 13px !important; letter-spacing: 0; }
+section[data-testid='stSidebar'] input, section[data-testid='stSidebar'] textarea {
     background: #14264A !important; color: white !important; border: 1px solid #2D3748 !important;
-    font-family: 'Inter', sans-serif;
 }
-[data-testid='stMetricValue'] { color: #00B4D8 !important; font-family: 'JetBrains Mono', monospace; }
-[data-testid='stMetricLabel'] { color: rgba(255,255,255,0.6) !important; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; }
-.stAlert { background: #14264A !important; border-left: 4px solid #00B4D8 !important; }
-.stAlert * { color: white !important; }
-hr { border-color: #2D3748 !important; }
-[data-testid='stExpander'] { background: #14264A !important; border: 1px solid #2D3748 !important; }
-[data-testid='stExpander'] * { color: white !important; }
-.element-container, .stContainer { color: white; }
-[data-testid='stRadio'] label { color: white !important; }
-[data-testid='stRadio'] label p { color: rgba(255,255,255,0.85) !important; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.04em; }
-.stCaption { color: rgba(255,255,255,0.5) !important; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; }
-[data-testid='stSidebarNav'] { background: #14264A !important; }
+section[data-testid='stSidebar'] .stCaption { color: rgba(255,255,255,0.5) !important; }
+
+/* 본문 입력창 — 라이트 */
+.main textarea, .main input[type='text'] {
+    background: #F4F6FA !important; color: #0B1320 !important;
+    border: 1px solid #E5E7EB !important; border-radius: 6px !important;
+    font-family: 'Inter', sans-serif !important; font-size: 14px !important;
+}
+.main textarea:focus, .main input[type='text']:focus { border-color: #00B4D8 !important; box-shadow: 0 0 0 2px rgba(0,180,216,0.15) !important; }
+.main label { color: #6B7280 !important; font-family: 'JetBrains Mono', monospace !important; font-size: 11px !important; letter-spacing: 0.08em; font-weight: 600 !important; text-transform: uppercase; }
+
+/* 버튼 — 시안 솔리드 (모든 Streamlit primary selector) */
+.main .stButton > button[kind='primary'],
+.main button[kind='primary'],
+.main button[data-testid='baseButton-primary'],
+.main button[data-testid='stBaseButton-primary'],
+.stButton button[kind='primary'] {
+    background-color: #00B4D8 !important;
+    background: #00B4D8 !important;
+    color: #0B1320 !important;
+    border: none !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    padding: 12px 24px !important;
+    border-radius: 6px !important;
+}
+.main .stButton > button[kind='primary']:hover,
+.main button[kind='primary']:hover { background: #0096C7 !important; }
+.main .stButton > button[kind='primary'] p,
+.main button[kind='primary'] p { color: #0B1320 !important; font-family: 'JetBrains Mono', monospace !important; font-weight: 700 !important; }
+.main button[kind='secondary'] {
+    background: white !important; color: #0B1320 !important; border: 1px solid #E5E7EB !important;
+    font-family: 'JetBrains Mono', monospace !important; font-weight: 600 !important;
+}
+
+/* 메트릭 */
+[data-testid='stMetricValue'] { color: #0B1320 !important; font-family: 'JetBrains Mono', monospace !important; font-weight: 700; }
+[data-testid='stMetricLabel'] { color: #6B7280 !important; font-family: 'JetBrains Mono', monospace !important; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+[data-testid='stMetricDelta'] { color: #E64A4A !important; }
+
+/* Alert */
+.stAlert { border-radius: 6px !important; border-left-width: 4px !important; }
+.stAlert[data-baseweb='notification'] { background: #F4F6FA !important; }
+
+/* Container with border */
+.main [data-testid='stContainer'] { border: 1px solid #E5E7EB !important; border-radius: 8px !important; padding: 16px !important; }
+
+/* Expander */
+[data-testid='stExpander'] { border: 1px solid #E5E7EB !important; background: #F4F6FA !important; }
+[data-testid='stExpander'] summary { color: #0B1320 !important; font-family: 'JetBrains Mono', monospace !important; font-size: 12px !important; }
+
+/* hr */
+hr { border-color: #E5E7EB !important; }
+
+/* SelectBox */
+.main [data-baseweb='select'] > div { background: #F4F6FA !important; border: 1px solid #E5E7EB !important; color: #0B1320 !important; }
 </style>""", unsafe_allow_html=True)
 
 
