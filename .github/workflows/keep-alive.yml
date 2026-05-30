@@ -2,25 +2,66 @@ name: Keep Streamlit Cloud Alive
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/15 * * * *"  # 15분 (Streamlit 슬립 정책 안전 마진)
   workflow_dispatch:
+
+concurrency:
+  group: keep-alive
+  cancel-in-progress: false
 
 jobs:
   ping:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Ping (실패 무시)
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+
+      - name: Install Playwright Chromium
+        run: |
+          npm init -y
+          npm i playwright@latest
+          npx playwright install --with-deps chromium
+
+      - name: Visit page + click wake-up if asleep
         shell: bash
         run: |
-          set +e
-          URL="https://kw-ai-gateway.streamlit.app/_stcore/health"
-          echo "▸ ping $URL"
-          curl -s -m 20 --max-redirs 0 -o /dev/null -w "  HTTP %{http_code}\n" "$URL"
-
-          # 메인 페이지도 trigger
-          URL2="https://kw-ai-gateway.streamlit.app/"
-          echo "▸ trigger $URL2"
-          curl -s -m 20 --max-redirs 0 -o /dev/null -w "  HTTP %{http_code}\n" "$URL2"
-
-          echo "✅ done"
-          exit 0
+          node <<'EOF'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const ctx = await browser.newContext({
+              userAgent: 'Mozilla/5.0 KeepAliveBot (compatible)',
+              viewport: { width: 1280, height: 800 }
+            });
+            const page = await ctx.newPage();
+            try {
+              await page.goto('https://kw-ai-gateway.streamlit.app/', {
+                waitUntil: 'networkidle', timeout: 60000
+              });
+              const body = await page.content();
+              if (body.includes('Zzzz') || body.includes('back up')) {
+                console.log('▸ asleep, clicking wake-up button…');
+                try {
+                  await page.getByRole('button', { name: /yes.*back up/i }).click({ timeout: 5000 });
+                } catch (_) {
+                  try { await page.locator('button:has-text("Yes")').click({ timeout: 5000 }); }
+                  catch (_) { console.log('  (button not found, may already be loading)'); }
+                }
+                console.log('▸ waiting 45s for warm-up…');
+                await page.waitForTimeout(45000);
+                await page.reload({ waitUntil: 'networkidle', timeout: 60000 }).catch(()=>{});
+              } else {
+                console.log('▸ already awake ✓');
+              }
+              const title = await page.title();
+              console.log('▸ final title:', title);
+            } catch (e) {
+              console.log('▸ error (non-fatal):', e.message);
+            } finally {
+              await browser.close();
+            }
+          })();
+          EOF
+          echo "✓ done"
+        continue-on-error: true
