@@ -2,28 +2,27 @@ name: Keep Streamlit Cloud Alive
 
 on:
   schedule:
-    # 매 30분마다 ping (Streamlit Cloud 무료 슬립 방지)
-    - cron: "*/30 * * * *"
-  workflow_dispatch:  # 수동 실행 가능
+    - cron: "*/30 * * * *"  # 매 30분
+  workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Streamlit app
+      - name: Ping Streamlit health endpoint
+        # health 엔드포인트는 인증·리다이렉트 없이 200 반환 (Streamlit 표준)
+        # 실패해도 워크플로우는 성공 처리 (curl exit 무시)
         run: |
-          URL="https://kw-ai-gateway.streamlit.app/"
-          echo "▸ pinging $URL"
-          # -L: 리다이렉트 따라가기, -m 30: 30초 타임아웃
-          STATUS=$(curl -s -L -m 30 -o /tmp/response.html -w "%{http_code}" "$URL")
-          SIZE=$(wc -c < /tmp/response.html)
-          echo "▸ HTTP $STATUS, size $SIZE bytes"
+          URL="https://kw-ai-gateway.streamlit.app/_stcore/health"
+          echo "▸ ping $URL"
+          STATUS=$(curl -s -m 30 -o /tmp/r.txt -w "%{http_code}" "$URL" || echo "timeout")
+          BODY=$(cat /tmp/r.txt 2>/dev/null || echo "-")
+          echo "▸ HTTP $STATUS  body: $BODY"
 
-          # Zzzz 슬립 페이지면 한 번 더 시도 (깨우기)
-          if grep -q "Zzzz" /tmp/response.html 2>/dev/null; then
-            echo "▸ app was asleep, waking up..."
-            sleep 30
-            curl -s -L -m 60 "$URL" -o /tmp/response2.html
-            echo "▸ wake-up retry size: $(wc -c < /tmp/response2.html)"
-          fi
-          echo "✅ ping done"
+          # 메인 페이지도 한 번 — 슬립이면 깨우기 트리거
+          URL2="https://kw-ai-gateway.streamlit.app/"
+          echo "▸ trigger wake $URL2"
+          curl -s -m 30 --max-redirs 3 -o /dev/null -w "  main HTTP %{http_code} %{time_total}s\n" "$URL2" || echo "  (timeout — sleep 깨우는 중일 수 있음, 다음 cron에서 재시도)"
+
+          echo "✅ done"
+        continue-on-error: true
